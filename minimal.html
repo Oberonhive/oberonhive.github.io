@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>f-ish minimal — пилл это вырост карточки</title>
+<style>
+
+/* ============================================================================
+   f-ish MINIMAL — другая конструкция, а не другая настройка.
+   ----------------------------------------------------------------------------
+   ВСЕ прошлые попытки чинили одно и то же: «пусть две поверхности красятся
+   одинаково». Пока поверхностей ДВЕ и они сходятся по линии, шов возможен —
+   любой фильтр, маска, чужой слой, полупиксельная граница или просто разный
+   порядок квантования дают расхождение на единицу в канале, и оно видно.
+
+   Здесь поверхность ОДНА.
+
+   Докнутый пилл — не элемент. Это ВЫРОСТ КАРТОЧКИ В РЕЛЬС: тот же самый div,
+   тот же самый background, один clip-path, в контуре которого пилл и его
+   вогнутые уши — просто участок границы. Между «пиллом» и «карточкой» нет
+   стыка, потому что там нечему стыковаться: это внутренность одного полигона.
+   Шов не «совпадает» — его не существует.
+
+   Что из этого следует по всему файлу:
+     • Заливки пилла больше нет. Ни .fish-indicator-fill, ни weld-полигона, ни
+       заступа за шов, ни равенства цвета, ни его снапа — весь этот пласт
+       механики выброшен вместе с проблемой, которую он обслуживал.
+     • ЦВЕТ и ТЕНЬ полностью разведены. Цвет — один элемент, прямая отрисовка,
+       ни фильтра, ни маски над ним. Тень — отдельные НЕВИДИМЫЕ слои, и им
+       можно всё: фильтры, обрезки, свои слои. Тень не несёт цвета, поэтому
+       переквантовать ей нечего.
+     • Свободный (недокнутый) пилл остаётся отдельным элементом — но он ни к
+       чему не примыкает, стыка у него нет по определению.
+     • Форма везде — clip-path по кривой Ламе: одна операция, один результат в
+       Chrome, Safari, Firefox и на iOS. Ни corner-shape, ни маски, ни
+       @supports, ни полифилла.
+     • Квант --g округляется до целого ФИЗИЧЕСКОГО пикселя, поэтому прямые
+       грани не садятся на полпикселя (при dpr 1.5 «1px» — это полтора).
+
+   Слои: матовый фон → ambient рельса (1) → страницы: тень, затем ОДНА заливка
+   с выростом (2) → рельс: подписи и свободный пилл (3) → ползунок (8).
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Rubik'; font-style: normal; font-weight: 300 900; font-display: block;
+  src: url('/fonts/rubik-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Rubik'; font-style: normal; font-weight: 300 900; font-display: block;
+  src: url('/fonts/rubik-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Rubik'; font-style: normal; font-weight: 300 900; font-display: block;
+  src: url('/fonts/rubik-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+/* --lobe-y — где вырост стоит ВНУТРИ карточки (её собственная система
+   координат, поэтому он едет вместе с ней при прокрутке).
+   --pill-y  — где стоит свободный пилл и тень выроста ВО ВЬЮПОРТЕ.
+   Оба зарегистрированы как <length>, потому что травел — это переход по ним,
+   а не по transform: transform-переход компонуется на GPU и выдаёт элементу
+   собственный слой, который потом уже не забирают. */
+@property --lobe-scroll { syntax: '<length>'; inherits: true; initial-value: 0px; }
+@property --lobe-base { syntax: '<length>'; inherits: true; initial-value: 0px; }
+@property --pill-y { syntax: '<length>'; inherits: true; initial-value: 0px; }
+
+html {
+  color-scheme: dark;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow-anchor: none;
+  scroll-behavior: auto; /* клик по строке ПРЫГАЕТ на страницу */
+}
+html::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+* { box-sizing: border-box; }
+
+body {
+  --mantle: #181825;
+  --ink: #cdd6f4;
+  --ink-soft: #bac2de;
+  --ink-mute: #9399b2;
+  --lav: #b4befe;
+  --mauve: #cba6f7;
+  --green: #a6e3a1;
+  --peach: #fab387;
+  --pink: #f5c2e7;
+  --teal: #94e2d5;
+  --blue: #89b4fa;
+
+  /* КВАНТ — целое число ФИЗИЧЕСКИХ пикселей (скрипт публикует --g). Плавная
+     формула даёт дробь, а от кванта считается ширина рельса, то есть граница
+     карточки; при dpr 1.5 «1px» это полтора физических, и грань садится на
+     половину пикселя — половина покрытия читается как другой цвет. */
+  --g-fluid: clamp(0.375rem, min(0.3333vw, 0.8333vh), 0.75rem);
+  --g: var(--g-fluid);
+  --gt: clamp(1rem, calc(0.5rem + 0.4444vw), 1.5rem);
+  --row: calc(9 * var(--g));      /* высота строки рельса = высота пилла */
+  --r: calc(var(--row) / 2);      /* общий радиус: карточка, пилл, уши */
+  --n: 1.5;                       /* показатель суперэллипса — одна ручка на всё */
+  --pg: calc(2 * var(--g));       /* зазор между карточками */
+  --sidebar: calc(56 * var(--g)); /* ширина рельса */
+  --cx: calc(3.25 * var(--gt));   /* боковой отступ контента */
+  --rail-pad-x: calc(4.6667 * var(--g));
+  --pill-inset: var(--g);         /* вырост не доходит до края рельса на квант */
+  --seam: 1px;                    /* скрипт публикует ровно один физический */
+  --ease: cubic-bezier(0.22, 0.68, 0.32, 1);
+
+  --rail-bg: var(--mantle);
+  --tint-card: 15%;
+  --tint-ink: 64%;
+  --tint-soft: 26%;
+  /* Тень поверхностей: тёмная тема — чёрный, сила 2.6, иначе не читается
+     тёмным по тёмному. Живёт ТОЛЬКО на невидимых слоях. */
+  --drop:
+    drop-shadow(0 0 3px hsl(0 0% 0% / 0.364))
+    drop-shadow(0 4px 11px hsl(0 0% 0% / 0.338));
+
+  margin: 0;
+  background: var(--rail-bg);
+  color: var(--ink);
+  font-family: 'Rubik', 'Helvetica Neue', Arial, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Травел — переход по обеим координатам, взведённый только на время поездки и
+   снятый по transitionend. В покое ничего не анимируется. */
+body[data-travel] {
+  transition: --pill-y 0.16s var(--ease);
+}
+
+/* ============================================================================
+   ВЫРОСТ ДОЛЖЕН СТОЯТЬ НА СТРОКЕ, А ЖИВЁТ ОН В КООРДИНАТАХ КАРТОЧКИ.
+   Строка неподвижна (рельс фиксирован), карточка едет со скроллом — значит
+   координата выроста ВНУТРИ карточки равна «строка минус верх карточки», то
+   есть база плюс scrollY. Ровно линейная функция прокрутки.
+   Считать её в обработчике scroll нельзя: JS получает управление уже ПОСЛЕ
+   того, как кадр прокрутки скомпонован, поэтому вырост всегда отстаёт на кадр
+   и дрожит относительно строки. Отдаём эту компенсацию компоновщику: анимация
+   по таймлайну корневого скроллера интерполирует --lobe-y от базы до
+   базы + весь ход прокрутки, то есть даёт ровно base + scrollY на каждом
+   кадре, без участия JS.
+   База анимируема сама по себе — поэтому травел между строками остаётся
+   плавным переходом и не мешает компенсации.
+   ========================================================================== */
+/* ИНДИКАТОР В ПРОКРУТКЕ НЕ УЧАСТВУЕТ.
+   Он живёт в фиксированном рельсе, его координата --pill-y это положение
+   строки во вьюпорте, а строки неподвижны — значит при прокрутке ему нечего
+   пересчитывать и нечему отставать. Ровно это и было не так в предыдущей
+   попытке: индикатор был вырезан в заливке карточки, то есть ехал вместе с
+   ней, и его приходилось покадрово возвращать назад с главного потока —
+   отсюда «желе». Компенсации больше нет, потому что нет и движения. */
+
+/* ============================================================================
+   AMBIENT — рельс уходит в тень по мере ухода ОТ страницы: непрозрачный
+   эллиптический градиент, ноль у края колонки (поэтому против карточки шва
+   нет) и до чёрного у дальнего края. Альфы нет, бандить нечему; сверху тайл
+   синего шума в overlay дизерит рампу, чтобы восьмибитный градиент не
+   постеризовался ни на каком масштабе.
+   ========================================================================== */
+.f-ambient {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar);
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    url('data:image/png;base64,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'),
+    radial-gradient(
+      ellipse 100% 280% at 0% 0%,
+      #000 0%,
+      color-mix(in srgb, #000 55%, var(--rail-bg)) 30%,
+      color-mix(in srgb, #000 25%, var(--rail-bg)) 55%,
+      color-mix(in srgb, #000 8%, var(--rail-bg)) 78%,
+      var(--rail-bg) 100%
+    );
+  background-size: 128px 128px, 100% 100%;
+  background-repeat: repeat, no-repeat;
+  background-blend-mode: overlay, normal;
+  image-rendering: pixelated;
+}
+
+/* ============================================================================
+   СТРАНИЦЫ. Документ и есть скроллер. Секция занимает ВСЮ ширину вьюпорта,
+   включая полосу рельса, — именно поэтому её заливка может дотянуться выростом
+   до меню. Всё, что левее карточки и вне выроста, отрезано полигоном.
+   ========================================================================== */
+/* ============================================================================
+   ПОРЯДОК СЛОЁВ — здесь он несёт смысл, а не оформление.
+   Вырост нарисован КАРТОЧКОЙ, то есть живёт в слое контента. Значит рельс
+   нельзя держать одним слоем: будь он целиком выше, hover-подсветка соседней
+   строки накрыла бы индикатор; будь он целиком ниже — подписи ушли бы под
+   карточку. Поэтому рельс НЕ создаёт своего контекста наложения, и его части
+   встают по обе стороны от контента:
+       1  ambient рельса
+       2  hover-подсветки строк      ← ниже индикатора
+       3  страницы: тень и заливка с выростом
+       4  подписи, кнопки шапки, футер, свободный пилл  ← выше индикатора
+   ========================================================================== */
+.f-content { position: relative; z-index: 3; }
+.f-page {
+  position: relative;
+  --slot-gap: var(--pg); /* зазор до следующей карточки; у последней его нет */
+  padding-bottom: var(--slot-gap);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  --page-bg: color-mix(in srgb, var(--ac) var(--tint-card), var(--rail-bg));
+  --page-ink: color-mix(in srgb, var(--ac) var(--tint-ink), var(--ink));
+}
+.f-page:last-child { --slot-gap: 0px; }
+
+/* ---- ТЕНЬ КАРТОЧКИ — невидимый слой. Обвести произвольный силуэт умеет
+   только drop-shadow по альфе, поэтому форма рисуется двойником под фильтром;
+   двойник утоплен на пиксель, чтобы его сглаженная кромка ушла под непрозрачную
+   заливку и не удвоила её. Цвета этот слой не несёт: его целиком закрывает
+   заливка, а всё, что от него остаётся на экране, — размытая тень. ------- */
+.f-page-shadow {
+  position: absolute;
+  inset: 0 0 var(--slot-gap) 0;
+  pointer-events: none;
+  filter: var(--drop);
+}
+.f-page-cast {
+  position: absolute;
+  inset: 1px 0 1px 0;
+  background: var(--page-bg);
+  clip-path: var(--card-clip-cast);
+}
+
+/* ---- ЕДИНСТВЕННАЯ ЦВЕТНАЯ ПОВЕРХНОСТЬ ------------------------------------
+   Один элемент, один фон, один полигон. У активной страницы полигон включает
+   вырост в рельс: пилл и его вогнутые уши — участок ТОГО ЖЕ контура, а не
+   отдельная фигура. Стыка между пиллом и карточкой не существует физически.
+   Над этим элементом нет ни фильтра, ни маски, ни собственного слоя. ------ */
+.f-page-fill {
+  position: absolute;
+  inset: 0 0 var(--slot-gap) 0;
+  pointer-events: none;
+  background: var(--page-bg);
+  clip-path: var(--card-clip);
+}
+
+.f-body {
+  position: relative;
+  flex: 1;
+  padding: 2.75rem var(--cx) 2.75rem calc(var(--sidebar) + var(--cx));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.f-kicker {
+  margin: 0 0 0.9em;
+  font-size: calc(0.8125 * var(--gt));
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--page-ink);
+}
+.f-h1 {
+  margin: 0 0 0.5em;
+  font-size: clamp(2.6rem, 6.4vw, calc(5 * var(--gt)));
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.f-h2 {
+  margin: 1.6em 0 0.5em;
+  font-size: clamp(1.4rem, 2.6vw, calc(2 * var(--gt)));
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--page-ink);
+}
+.f-text {
+  margin: 0 0 1em;
+  max-width: 68ch;
+  font-size: clamp(1.05rem, 1.5vw, calc(1.3 * var(--gt)));
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* ============================================================================
+   РЕЛЬС — фиксированная ПРОЗРАЧНАЯ колонка без единого overflow (вложенный
+   скролл-контейнер даёт собственную композитную поверхность, а краевая
+   растушёвка — ещё и маску на растровом пути). Прозрачная, потому что сквозь
+   неё видно ambient, тень карточки и её вырост; выше страниц, потому что
+   подписи должны читаться поверх выроста.
+   ========================================================================== */
+.f-rail {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar);
+  /* Рельс ВЫШЕ контента: подписи должны читаться поверх выроста.
+     Внутрь него нельзя положить ничего, что обязано быть НИЖЕ выроста:
+     position: fixed сам по себе создаёт контекст наложения, поэтому любой
+     z-index потомка остаётся заперт внутри этого слоя. Именно поэтому
+     hover-подсветка вынесена отдельным фиксированным слоем (.f-hover). */
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1.625rem;
+  background: transparent;
+}
+.f-head {
+  position: relative;
+  z-index: 4;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--g);
+  height: calc(2 * var(--r)); /* ровно 2·R — она же зазор над первой строкой */
+  padding: 0 var(--g);
+}
+.f-headbtn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(2 * var(--r) - 2 * var(--g));
+  min-width: calc(2 * var(--r) - 2 * var(--g));
+  padding: 0 calc(1.5 * var(--g));
+  border: none; /* бордер размазывает по кривой высокой кривизны — только заливка */
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: calc(2.1667 * var(--g));
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  clip-path: var(--btn-clip);
+  transition: background 0.18s ease;
+}
+.f-headbtn:hover { background: color-mix(in srgb, var(--ink) 14%, transparent); }
+.f-headbtn--end { margin-left: auto; }
+
+.f-tabs {
+  position: relative;
+  padding-block: var(--r);          /* ухо-запас сверху и снизу */
+  margin-top: calc(-1 * var(--r));  /* пилл первой строки встаёт ровно на 2·R */
+}
+.f-tab {
+  position: relative;
+  --ac: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.85em;
+  width: 100%;
+  min-height: var(--row);
+  padding: 0 0 0 var(--rail-pad-x); /* текстовая ось фиксирована */
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  /* НАМЕРЕННО без z-index: строка не должна быть своим контекстом наложения,
+     чтобы подсветка (z0) и подпись (z2) разрешались рядом со свободным
+     пиллом (z1) прямо в .f-tabs. */
+}
+/* HOVER-ПОДСВЕТКА — ОДНА на всё меню, отдельным фиксированным слоем НИЖЕ
+   контента. Внутри рельса ей места нет: рельс обязан быть выше выроста (иначе
+   подписи уйдут под карточку), а подсветка обязана быть ниже (иначе она
+   накрывает индикатор — тот самый давний баг). Раз она одна, ей и не нужно
+   жить в строке: она ездит по строкам ровно так же, как индикатор, и разметка
+   строки становится просто текстом. */
+.f-hover {
+  position: fixed;
+  left: calc(2 * var(--g));
+  width: calc(var(--sidebar) - 2 * var(--g) - var(--pill-inset));
+  top: 0;
+  height: var(--hover-h, var(--row));
+  z-index: 2;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--hover-ac, transparent) var(--tint-soft), transparent);
+  clip-path: var(--hl-clip);
+  opacity: 0;
+  transition: opacity 0.26s ease;
+  transform: translateY(var(--hover-y, 0px));
+}
+.f-hover[data-on] { opacity: 0.55; }
+/* Подписи не перекрашиваются при активации: вырост — светлый тинт той же
+   страницы, тот же акцент на нём читается. Состояние выражено выростом. */
+.f-tab-idx {
+  position: relative;
+  z-index: 4;
+  font-size: calc(2.3333 * var(--g));
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ac) 56%, var(--ink));
+  opacity: 0.9;
+}
+.f-tab-label {
+  position: relative;
+  z-index: 4;
+  font-size: calc(2.6667 * var(--g));
+  font-weight: 500;
+  color: color-mix(in srgb, var(--ac) var(--tint-ink), var(--ink));
+}
+.f-foot {
+  position: relative;
+  z-index: 4;
+  flex: none;
+  margin-top: auto;
+  padding: 1.125rem var(--rail-pad-x) 0;
+  font-size: calc(2.1667 * var(--g));
+  line-height: 1.55;
+  color: var(--ink-mute);
+  white-space: pre-line;
+}
+
+/* ---- СВОБОДНЫЙ ПИЛЛ — единственный случай, когда пилл действительно
+   отдельная поверхность. Он ни к чему не примыкает (отходит от края рельса на
+   квант и висит над рельсом), поэтому стыка у него нет по определению и
+   расхождение в единицу канала там физически не с чем сравнивать. --------- */
+.f-pill {
+  position: absolute;
+  left: var(--pill-inset);
+  right: calc(var(--g) - var(--dock, 1) * var(--g));
+  top: 0;
+  height: var(--pill-h, var(--row));
+  z-index: 0;                 /* внутри рельса: ниже подписей, выше ничего */
+  pointer-events: none;
+  transform: translateY(var(--pill-y));
+}
+
+.f-pill-shadow {
+  position: absolute;
+  inset: 0;
+  /* обрезаем ОТРИСОВАННУЮ тень ровно по видимой грани карточки, когда докнуто:
+     иначе тень пилла ложится подсветкой-наоборот на страницу */
+  clip-path: inset(-100px calc(var(--dock, 1) * 2 * var(--seam)) -100px -100px);
+}
+.f-pill-cast { position: absolute; inset: 0; filter: var(--drop); }
+.f-pill-cast-shape {
+  position: absolute;
+  inset: calc(1px - var(--r)) calc(-1 * var(--seam)) calc(1px - var(--r)) 1px;
+  background: #000;             /* важна только альфа */
+  clip-path: var(--pill-clip-cast);
+}
+.f-pill-fill {
+  position: absolute;
+  inset: calc(-1 * var(--r)) calc(-1 * var(--seam)) calc(-1 * var(--r)) 0;
+  background: var(--pill-bg);
+  clip-path: var(--pill-clip);
+}
+
+/* ============================================================================
+   ОВЕРЛЕЙНЫЙ ПОЛЗУНОК — ручка поверх страницы, без трека, ширины не
+   резервирует. Позиция КОМПОНУЕТСЯ по таймлайну корневого скроллера, а не
+   пишется из обработчика scroll; размер и ход публикуются только на ресайзе.
+   ========================================================================== */
+.f-scrollbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0.5rem;
+  display: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 24%, transparent);
+  z-index: 8;
+  transition: width 0.12s ease, background 0.15s ease;
+}
+@supports (animation-timeline: scroll(root block)) {
+  .f-scrollbar { animation: f-thumb linear both; animation-timeline: scroll(root block); }
+  @keyframes f-thumb {
+    from { transform: translateY(0); }
+    to { transform: translateY(var(--thumb-max, 0px)); }
+  }
+}
+.f-scrollbar:hover { width: 0.625rem; background: color-mix(in srgb, var(--ink) 40%, transparent); }
+
+</style>
+</head>
+
+<body>
+
+<div class="f-ambient" aria-hidden="true"></div>
+<div class="f-hover" id="hover" aria-hidden="true"></div>
+
+<main class="f-content">
+
+  <section class="f-page" style="--ac: var(--peach)">
+    <div class="f-page-shadow" aria-hidden="true"><div class="f-page-cast"></div></div>
+    <div class="f-page-fill" aria-hidden="true"></div>
+    <div class="f-body">
+      <p class="f-kicker">01 · Конструкция</p>
+      <h1 class="f-h1">Пилл — это карточка</h1>
+      <p class="f-text">Докнутый пилл здесь не элемент. Это вырост самой карточки в рельс: тот же div, тот же фон, один clip-path, в контуре которого пилл и его вогнутые уши — просто участок границы.</p>
+      <h2 class="f-h2">Почему шва нет</h2>
+      <p class="f-text">Между пиллом и карточкой нечему стыковаться: там внутренность одного полигона. Цвет не «совпадает» — он один и тот же пиксель одной и той же заливки.</p>
+    </div>
+  </section>
+
+  <section class="f-page" style="--ac: var(--lav)">
+    <div class="f-page-shadow" aria-hidden="true"><div class="f-page-cast"></div></div>
+    <div class="f-page-fill" aria-hidden="true"></div>
+    <div class="f-body">
+      <p class="f-kicker">02 · Что выброшено</p>
+      <h1 class="f-h1">Половины механики нет</h1>
+      <p class="f-text">Вместе с проблемой ушло то, что её обслуживало: заливка пилла, weld-полигон, заступ за шов, равенство цвета двух поверхностей и его округление до целого sRGB.</p>
+      <h2 class="f-h2">И ещё</h2>
+      <p class="f-text">Скролл-контейнер меню с краевой растушёвкой, правый вылет под тень, четырёхслойный индикатор и выбор между нативным corner-shape и маской фоллбэка.</p>
+    </div>
+  </section>
+
+  <section class="f-page" style="--ac: var(--teal)">
+    <div class="f-page-shadow" aria-hidden="true"><div class="f-page-cast"></div></div>
+    <div class="f-page-fill" aria-hidden="true"></div>
+    <div class="f-body">
+      <p class="f-kicker">03 · Цвет и тень</p>
+      <h1 class="f-h1">Разведены полностью</h1>
+      <p class="f-text">Цвет — один элемент прямой отрисовкой, над ним нет ни фильтра, ни маски, ни собственного слоя. Тень — отдельные невидимые слои, и им можно всё: фильтры, обрезки, свои слои.</p>
+      <h2 class="f-h2">Почему это безопасно</h2>
+      <p class="f-text">Тень не несёт цвета: до экрана от неё доходит только размытая альфа. Переквантовать ей нечего, и никакая её механика не может сдвинуть тон поверхности.</p>
+    </div>
+  </section>
+
+  <section class="f-page" style="--ac: var(--green)">
+    <div class="f-page-shadow" aria-hidden="true"><div class="f-page-cast"></div></div>
+    <div class="f-page-fill" aria-hidden="true"></div>
+    <div class="f-body">
+      <p class="f-kicker">04 · Кривая</p>
+      <h1 class="f-h1">Одна кривая на все движки</h1>
+      <p class="f-text">Все скругления — полигоны по кривой Ламе показателя n. Ни corner-shape, ни масок, ни @supports, ни полифилла: расходиться между Chrome, Safari, Firefox и iOS попросту нечему.</p>
+      <h2 class="f-h2">И на любом зуме</h2>
+      <p class="f-text">Векторный клип пересчитывается аналитически при каждом масштабе, тогда как растровая маска кэширует картинку и растягивает её — мягкие ступенчатые края берутся именно оттуда.</p>
+    </div>
+  </section>
+
+  <section class="f-page" style="--ac: var(--pink)">
+    <div class="f-page-shadow" aria-hidden="true"><div class="f-page-cast"></div></div>
+    <div class="f-page-fill" aria-hidden="true"></div>
+    <div class="f-body">
+      <p class="f-kicker">05 · Движение</p>
+      <h1 class="f-h1">Травел меняет контур</h1>
+      <p class="f-text">Вырост едет переходом зарегистрированной координаты, подставленной прямо в полигон. Переход по transform компонуется на GPU и выдаёт элементу собственный слой, который потом уже не забирают.</p>
+      <h2 class="f-h2">Только поездка</h2>
+      <p class="f-text">Цвет, состояние дока и высота щёлкают мгновенно. Переход взведён лишь на время поездки и снимается по transitionend.</p>
+    </div>
+  </section>
+
+  <section class="f-page" style="--ac: var(--blue)">
+    <div class="f-page-shadow" aria-hidden="true"><div class="f-page-cast"></div></div>
+    <div class="f-page-fill" aria-hidden="true"></div>
+    <div class="f-body">
+      <p class="f-kicker">06 · Свободный пилл</p>
+      <h1 class="f-h1">Единственная отдельная фигура</h1>
+      <p class="f-text">Когда край карточки не проходит мимо строки, вырост невозможен, и пилл отделяется: отходит от края рельса на квант и висит над ним со своей тенью.</p>
+      <h2 class="f-h2">Здесь шва нет по определению</h2>
+      <p class="f-text">Он ни к чему не примыкает — вокруг матовый рельс. Расхождение в единицу канала там не с чем сравнивать, поэтому и требовать от него равенства не нужно.</p>
+    </div>
+  </section>
+
+  <section class="f-page" style="--ac: var(--mauve)">
+    <div class="f-page-shadow" aria-hidden="true"><div class="f-page-cast"></div></div>
+    <div class="f-page-fill" aria-hidden="true"></div>
+    <div class="f-body">
+      <p class="f-kicker">07 · Квант</p>
+      <h1 class="f-h1">Квант — целый пиксель</h1>
+      <p class="f-text">Ширина рельса это пятьдесят шесть квантов, и плавная формула почти никогда не даёт целого. Дробная грань — частичное покрытие, то есть смесь, и рядом с плотной заливкой она читается как другой цвет.</p>
+      <h2 class="f-h2">Округление</h2>
+      <p class="f-text">Квант округляется до целого физического пикселя, поэтому каждая прямая грань, кратная ему, ложится на границу пикселя. При dpr полтора один CSS-пиксель это полтора физических — «1px» тут не помогает.</p>
+    </div>
+  </section>
+
+</main>
+
+<aside class="f-rail" id="rail">
+  <div class="f-head">
+    <button class="f-headbtn" type="button" aria-label="Тема">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2.5v2M12 19.5v2M4.6 4.6L6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/>
+      </svg>
+    </button>
+    <button class="f-headbtn f-headbtn--end" type="button">RU</button>
+  </div>
+
+  <nav class="f-tabs" id="tabs">
+    <button class="f-tab" type="button" style="--ac: var(--peach)"><span class="f-tab-idx">01</span><span class="f-tab-label">Конструкция</span></button>
+    <button class="f-tab" type="button" style="--ac: var(--lav)"><span class="f-tab-idx">02</span><span class="f-tab-label">Выброшено</span></button>
+    <button class="f-tab" type="button" style="--ac: var(--teal)"><span class="f-tab-idx">03</span><span class="f-tab-label">Цвет и тень</span></button>
+    <button class="f-tab" type="button" style="--ac: var(--green)"><span class="f-tab-idx">04</span><span class="f-tab-label">Кривая</span></button>
+    <button class="f-tab" type="button" style="--ac: var(--pink)"><span class="f-tab-idx">05</span><span class="f-tab-label">Движение</span></button>
+    <button class="f-tab" type="button" style="--ac: var(--blue)"><span class="f-tab-idx">06</span><span class="f-tab-label">Свободный пилл</span></button>
+    <button class="f-tab" type="button" style="--ac: var(--mauve)"><span class="f-tab-idx">07</span><span class="f-tab-label">Квант</span></button>
+  </nav>
+
+  <!-- индикатор: статичный слой рельса, прокрутка его не касается -->
+  <div class="f-pill" aria-hidden="true" style="--dock: 1">
+    <div class="f-pill-shadow"><div class="f-pill-cast"><div class="f-pill-cast-shape"></div></div></div>
+    <div class="f-pill-fill"></div>
+  </div>
+
+  <div class="f-foot">f-ish · minimal
+пилл это вырост карточки</div>
+</aside>
+
+<div class="f-scrollbar" id="scrollbar" aria-hidden="true"></div>
+
+<script>
+(function () {
+  'use strict'
+
+  var root = document.body
+  var rail = document.getElementById('rail')
+  var tabsBox = document.getElementById('tabs')
+  var tabs = [].slice.call(document.querySelectorAll('.f-tab'))
+  var pages = [].slice.call(document.querySelectorAll('.f-page'))
+  var thumb = document.getElementById('scrollbar')
+
+  /* ==========================================================================
+     КРИВАЯ — |x|^n + |y|^n = 1, n = 2 ** --n: ровно та, что рисует
+     corner-shape: superellipse(). Отсюда снимается ВСЯ форма в этом файле.
+     Полигоны width/height-агностичны через calc(100% − x), поэтому переживают
+     любой перерасчёт размеров бокса; строятся только когда меняется радиус.
+     ====================================================================== */
+  var SEG = 24
+  var TS = []
+  for (var i = 0; i <= SEG; i++) TS.push((i / SEG) * Math.PI / 2)
+  var q = function (v) { return +v.toFixed(2) }
+
+  function curve(n) {
+    var p = 2 / n
+    return {
+      co: function (R, t) { return Math.pow(Math.cos(t), p) * R },
+      si: function (R, t) { return Math.pow(Math.sin(t), p) * R }
+    }
+  }
+
+  /* Скругление, заданное четырьмя радиусами (кнопки шапки, подсветка строки).
+     Обход по часовой от левого верха; нулевой радиус вырождается в угол. */
+  function boxClip(tl, tr, br, bl, n) {
+    var c = curve(n), pts = []
+    var X = function (d) { return d ? 'calc(100% - ' + q(d) + 'px)' : '100%' }
+    var Y = X
+    TS.forEach(function (t) { pts.push(q(tl - c.co(tl, t)) + 'px ' + q(tl - c.si(tl, t)) + 'px') })
+    TS.forEach(function (t) { pts.push(X(tr - c.si(tr, t)) + ' ' + q(tr - c.co(tr, t)) + 'px') })
+    TS.forEach(function (t) { pts.push(X(br - c.co(br, t)) + ' ' + Y(br - c.si(br, t))) })
+    TS.forEach(function (t) { pts.push(q(bl - c.si(bl, t)) + 'px ' + Y(bl - c.co(bl, t))) })
+    return 'polygon(' + pts.join(',') + ')'
+  }
+
+  /* Карточка: скруглена только слева, правый край уходит за экран.
+     xc — где стоит её левая грань внутри полноширинного бокса секции. */
+  function cardEdge(xc, r, n) {
+    var c = curve(n), pts = []
+    TS.forEach(function (t) { pts.push(q(xc + r - c.co(r, t)) + 'px ' + q(r - c.si(r, t)) + 'px') })
+    pts.push('100% 0', '100% 100%')
+    TS.forEach(function (t) {
+      pts.push(q(xc + r - c.si(r, t)) + 'px calc(100% - ' + q(r - c.co(r, t)) + 'px)')
+    })
+    return pts
+  }
+  function cardClip(xc, r, n) { return 'polygon(' + cardEdge(xc, r, n).join(',') + ')' }
+
+  /* Силуэт индикатора ОДНИМ полигоном — докнутая раскладка (пилл + обе
+     вогнутые ушные выемки + заступ за шов) либо свободный пилл. Все касательные
+     стыки внутри одного контура, поэтому изломиться или разойтись нечему.
+     Бокс: пилл, расширенный на R вверх и вниз (уши) и на шов вправо. */
+  function pillClip(row, rc, re, tan, right, flare, n) {
+    var c = curve(n), pts = []
+    var X = function (d) { return d ? 'calc(100% - ' + q(d) + 'px)' : '100%' }
+    if (!flare) {
+      TS.forEach(function (t) { pts.push(q(rc - c.co(rc, t)) + 'px ' + q(re + rc - c.si(rc, t)) + 'px') })
+      TS.forEach(function (t) { pts.push(X(right + rc - c.si(rc, t)) + ' ' + q(re + rc - c.co(rc, t)) + 'px') })
+      TS.forEach(function (t) { pts.push(X(right + rc - c.co(rc, t)) + ' ' + q(re + row - rc + c.si(rc, t)) + 'px') })
+      TS.forEach(function (t) { pts.push(q(rc - c.si(rc, t)) + 'px ' + q(re + row - rc + c.co(rc, t)) + 'px') })
+      return 'polygon(' + pts.join(',') + ')'
+    }
+    pts.push(X(right) + ' 0')
+    if (right !== tan) pts.push(X(tan) + ' 0')
+    TS.forEach(function (t) { pts.push(X(tan + re - c.co(re, t)) + ' ' + q(c.si(re, t)) + 'px') })
+    TS.forEach(function (t) { pts.push(q(rc - c.si(rc, t)) + 'px ' + q(re + rc - c.co(rc, t)) + 'px') })
+    TS.forEach(function (t) { pts.push(q(rc - c.co(rc, t)) + 'px ' + q(re + row - rc + c.si(rc, t)) + 'px') })
+    TS.forEach(function (t) { pts.push(X(tan + re - c.si(re, t)) + ' ' + q(re + row + re - c.co(re, t)) + 'px') })
+    if (right !== tan) pts.push(X(tan) + ' ' + q(row + 2 * re) + 'px')
+    pts.push(X(right) + ' ' + q(row + 2 * re) + 'px')
+    return 'polygon(' + pts.join(',') + ')'
+  }
+
+  /* ==========================================================================
+     ПОЛИГОН КАРТОЧКИ С ВЫРОСТОМ — оставлен как рабочий эталон «одной заливки»,
+     сейчас не используется: индикатор вернулся в рельс и в прокрутке не
+     участвует.
+     Обход тот же, что у карточки, но поднимаясь по её левой грани мы делаем
+     крюк влево вокруг выроста: вогнутое ухо снизу, два выпуклых угла пилла,
+     вогнутое ухо сверху. Все касательные стыки ВНУТРИ одного контура, поэтому
+     ни изломов, ни швов ни на каком зуме — и, главное, пилл здесь не фигура, а
+     участок границы одной заливки.
+     Координаты выроста по вертикали идут через var(--lobe-y), поэтому травел —
+     это переход одной длины, а не перегенерация строки.
+     ====================================================================== */
+  function cardLobeClip(xc, r, xp, rc, re, row, n) {
+    var c = curve(n)
+    var pts = cardEdge(xc, r, n)
+    /* База (строка в координатах карточки при нулевом скролле) плюс поправка
+       на прокрутку, которую ведёт компоновщик. Строка полигона от прокрутки не
+       зависит и не перегенерируется. */
+    var L = function (k) { return 'calc(var(--lobe-base) + var(--lobe-scroll) + ' + q(k) + 'px)' }
+    /* нижнее ухо: с левой грани карточки внутрь, к нижнему краю выроста */
+    TS.forEach(function (t) { pts.push(q(xc - re + c.co(re, t)) + 'px ' + L(row + re - c.si(re, t))) })
+    /* нижний левый угол выроста */
+    TS.forEach(function (t) { pts.push(q(xp + rc - c.si(rc, t)) + 'px ' + L(row - rc + c.co(rc, t))) })
+    /* верхний левый угол выроста */
+    TS.forEach(function (t) { pts.push(q(xp + rc - c.co(rc, t)) + 'px ' + L(rc - c.si(rc, t))) })
+    /* верхнее ухо: обратно на левую грань карточки */
+    TS.forEach(function (t) { pts.push(q(xc - re + c.si(re, t)) + 'px ' + L(c.co(re, t) - re)) })
+    return 'polygon(' + pts.join(',') + ')'
+  }
+
+  /* ==========================================================================
+     СЕТКА — квант на границе ФИЗИЧЕСКОГО пикселя.
+     ====================================================================== */
+  function readPx(expr) {
+    /* токены это calc()/clamp(); разрешаем их в px так же, как браузер */
+    root.style.borderTopLeftRadius = expr
+    var x = parseFloat(getComputedStyle(root).borderTopLeftRadius)
+    root.style.borderTopLeftRadius = ''
+    return x || 0
+  }
+  var n = Math.pow(2, parseFloat(getComputedStyle(root).getPropertyValue('--n')) || 1.5)
+  var r = 0, g = 0, seam = 1, xc = 0, xp = 0, slotGap = 0
+
+  function snapGrid() {
+    var dpr = window.devicePixelRatio || 1
+    g = Math.max(1, Math.round(readPx('var(--g-fluid)') * dpr)) / dpr
+    root.style.setProperty('--g', g + 'px')
+    seam = 1 / dpr
+    root.style.setProperty('--seam', seam + 'px')
+  }
+
+  /* ==========================================================================
+     СОСТОЯНИЕ
+     ====================================================================== */
+  var current = -1
+  var docked = true
+  var pillClips = { dock: '', dockCast: '', free: '', freeCast: '' }
+  var lastShape = { h: NaN, r: NaN, s: NaN }
+  /* Клипы выбираются состоянием дока — отдельно от построения, потому что док
+     меняется при прокрутке чаще, чем геометрия строки. */
+  function applyPillClips() {
+    root.style.setProperty('--pill-clip', docked ? pillClips.dock : pillClips.free)
+    root.style.setProperty('--pill-clip-cast', docked ? pillClips.dockCast : pillClips.freeCast)
+    pill.style.setProperty('--dock', docked ? 1 : 0)
+  }
+  var lastY = NaN
+  var settleTimer = 0
+
+  function settle() {
+    clearTimeout(settleTimer)
+    root.removeAttribute('data-travel')
+  }
+  function onSettle(e) { if (e.propertyName === '--pill-y') settle() }
+  root.addEventListener('transitionend', onSettle)
+  root.addEventListener('transitioncancel', onSettle)
+
+  /* Публикуем ДВЕ величины, и обе не зависят от прокрутки:
+       --pill-y    — строка во вьюпорте (рельс фиксирован, значит константа);
+       --lobe-base — та же строка в координатах карточки при нулевом скролле.
+     Всё, что зависит от прокрутки, добавляет анимация по scroll-таймлайну —
+     поэтому здесь нет ни одного чтения scrollY и нечему отставать на кадр. */
+  function placeLobe(travel) {
+    var t = tabs[current].getBoundingClientRect()
+    var vy = t.top
+    if (travel && vy !== lastY && !isNaN(lastY)) {
+      root.setAttribute('data-travel', '')
+      clearTimeout(settleTimer)
+      settleTimer = setTimeout(settle, 400) /* 0.16s поездки плюс запас */
+    }
+    lastY = vy
+    root.style.setProperty('--pill-y', vy + 'px')
+    root.style.setProperty('--pill-h', t.height + 'px')
+    /* Силуэт строится по ФАКТИЧЕСКОЙ высоте строки: строка может быть любой,
+       и полигон обязан совпадать с боксом, иначе уши и прямая часть разъедутся
+       относительно грани карточки. Пересобираем только при реальном изменении. */
+    if (t.height === lastShape.h && r === lastShape.r && seam === lastShape.s) return
+    lastShape.h = t.height; lastShape.r = r; lastShape.s = seam
+    pillClips.dock = pillClip(t.height, r, r, 2 * seam, 0, true, n)
+    pillClips.dockCast = pillClip(t.height - 2, r - 1, r, 2 * seam, 2 * seam, true, n)
+    pillClips.free = pillClip(t.height, r, r, 0, seam, false, n)
+    pillClips.freeCast = pillClip(t.height - 2, r - 1, r, 0, 2 * seam, false, n)
+    applyPillClips()
+  }
+
+  function activate(index) {
+    if (index === current) return
+    current = index
+    tabs.forEach(function (t, k) {
+      if (k === index) t.setAttribute('data-active', '')
+      else t.removeAttribute('data-active')
+    })
+    pages.forEach(function (pg, k) {
+      if (k === index) pg.setAttribute('data-active', '')
+      else pg.removeAttribute('data-active')
+    })
+    /* цвет свободного пилла берётся с активной страницы — он ни к чему не
+       примыкает, поэтому достаточно той же формулы, без снапа и сверок */
+    root.style.setProperty('--pill-bg', getComputedStyle(pages[index]).getPropertyValue('--page-bg'))
+    placeLobe(true)
+  }
+
+  /* Страница k «пришла», когда верх её карточки поднялся до вертикального
+     центра строки k — карточка и её строка стоят друг напротив друга. Карточки
+     идут подряд, строки по возрастанию, поэтому предикат переключается
+     монотонно: активна последняя пришедшая. */
+  function activeFor() {
+    var i = 0
+    for (var k = 0; k < pages.length; k++) {
+      var t = tabs[k].getBoundingClientRect()
+      var p = pages[k].getBoundingClientRect()
+      if (p.top <= t.top + t.height / 2) i = k
+      else break
+    }
+    return i
+  }
+
+  /* Вырост возможен, только если ухо-запас строки [top − r, bottom + r]
+     целиком лежит на ПРЯМОЙ части левой грани карточки [top + r, bottom − r]:
+     иначе крюк полигона наехал бы на её скруглённый угол и контур бы
+     самопересёкся. Не лёг — вырост убирается, и появляется свободный пилл. */
+  function updateDock() {
+    if (current < 0) return
+    var t = tabs[current].getBoundingClientRect()
+    var p = pages[current].getBoundingClientRect()
+    var bottom = p.bottom - slotGap
+    var d = t.top - r >= p.top + r && t.bottom + r <= bottom - r
+    if (d === docked) return
+    docked = d
+    applyPillClips()
+  }
+
+  /* ==========================================================================
+     ПОЛЗУНОК
+     ====================================================================== */
+  /* Детекта поддержки НЕТ намеренно. CSS.supports('animation-timeline', …)
+     возвращает true и там, где таймлайн на самом деле не запускается (проверено:
+     currentTime остаётся null, свойство молча стоит на initial-value). Поэтому
+     обе величины ведёт JS всегда, а scroll-таймлайн, если он живой, просто
+     перезапишет их ТЕМ ЖЕ значением — расхождение невозможно, ветвления нет. */
+  var thumbMax = 0
+  function measureThumb() {
+    var vh = window.innerHeight
+    var sh = document.documentElement.scrollHeight
+    if (sh <= vh + 1) { thumb.style.display = 'none'; return }
+    var h = Math.max(40, (vh * vh) / sh)
+    thumbMax = vh - h
+    thumb.style.display = 'block'
+    thumb.style.height = h + 'px'
+    root.style.setProperty('--thumb-max', thumbMax + 'px')
+  }
+  /* Полный ход прокрутки — вторая точка анимации выроста: за весь ход она
+     смещает его ровно на scrollY, поэтому вырост стоит на строке намертво. */
+  function thumbPos() {
+    var max = document.documentElement.scrollHeight - window.innerHeight
+    thumb.style.transform = 'translateY(' + (max > 0 ? (window.scrollY / max) * thumbMax : 0) + 'px)'
+  }
+
+  /* ==========================================================================
+     ПРОКРУТКА И РЕСАЙЗ
+     ====================================================================== */
+  var ticking = false
+  function frame() {
+    ticking = false
+    activate(activeFor())
+    updateDock()
+    thumbPos()
+  }
+  window.addEventListener('scroll', function () {
+    if (ticking) return
+    ticking = true
+    requestAnimationFrame(frame)
+  }, { passive: true })
+
+  function remeasure() {
+    snapGrid()
+    r = readPx('var(--r)')
+    slotGap = readPx('var(--pg)')
+    xp = readPx('var(--pill-inset)')
+    xc = readPx('var(--sidebar)') - seam /* левая грань карточки */
+    var row = readPx('var(--row)')
+    var btn = 2.5 * g
+    var hl = r - g /* подсветка строки: радиус концентричен её высоте */
+    root.style.setProperty('--card-clip', cardClip(xc, r, n))
+    /* двойник тени утоплен на пиксель, чтобы его сглаженная кромка ушла под
+       непрозрачную заливку и не удвоила её (бокс уже сдвинут через inset) */
+    root.style.setProperty('--card-clip-cast', cardClip(xc + 1, r - 1, n))
+    lastShape.h = NaN
+
+
+    root.style.setProperty('--btn-clip', boxClip(btn, btn, btn, btn, n))
+    root.style.setProperty('--hl-clip', boxClip(hl, hl, hl, hl, n))
+    if (current < 0) activate(0)
+    else placeLobe(false)
+    measureThumb()
+    updateDock()
+  }
+
+  window.addEventListener('resize', remeasure, { passive: true })
+  new ResizeObserver(remeasure).observe(tabsBox)
+
+  /* Одна подсветка на всё меню: наведение только выставляет ей строку и тон.
+     Активную строку она не подсвечивает — там уже стоит вырост. */
+  var hover = document.getElementById('hover')
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () {
+      window.scrollTo(0, pages[i].getBoundingClientRect().top + window.scrollY)
+    })
+    tab.addEventListener('pointerenter', function () {
+      if (i === current) { hover.removeAttribute('data-on'); return }
+      var t = tab.getBoundingClientRect()
+      root.style.setProperty('--hover-y', (t.top + readPx('var(--pill-inset)')) + 'px')
+      root.style.setProperty('--hover-h', (t.height - 2 * readPx('var(--pill-inset)')) + 'px')
+      root.style.setProperty('--hover-ac', getComputedStyle(tab).getPropertyValue('--ac'))
+      hover.setAttribute('data-on', '')
+    })
+  })
+  tabsBox.addEventListener('pointerleave', function () { hover.removeAttribute('data-on') })
+
+  remeasure()
+})()
+</script>
+
+</body>
+</html>

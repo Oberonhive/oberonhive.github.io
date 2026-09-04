@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#11111b" />
+  <rect x="64" y="64" width="1072" height="502" rx="48" fill="#1e1e2e" />
+  <text x="120" y="300" font-size="200" font-weight="800" fill="#b4befe"
+    font-family="Inter, Helvetica, Arial, sans-serif">F</text>
+  <text x="128" y="382" font-size="44" fill="#cdd6f4"
+    font-family="Inter, Helvetica, Arial, sans-serif">Single-path, squircle-soft sites.</text>
+  <text x="128" y="444" font-size="28" fill="#a6adc8" letter-spacing="4"
+    font-family="Inter, Helvetica, Arial, sans-serif">BUILT WITH THE F TEMPLATE</text>
+</svg>

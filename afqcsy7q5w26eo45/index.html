@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GoMining · аудит трекинга</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%232f6f4e'/%3E%3Cpath d='M3 11.5V4.5h2l1.6 4 1.6-4h2v7H8.6V7l-1.4 3.4h-1L4.8 7v4.5z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./vendor/ag-grid-community/ag-grid.css">
+<link rel="stylesheet" href="./vendor/ag-grid-community/ag-theme-quartz.css">
+<link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-brand">
+    <span class="nav-title">Аудит трекинга</span>
+    <span class="nav-sub" id="nav-snapshot"></span>
+  </div>
+  <nav class="nav-tabs" id="nav-tabs">
+    <a class="tab" data-route="issues" href="#/issues">Issues</a>
+    <a class="tab" data-route="events" href="#/events">Events</a>
+    <a class="tab" data-route="sources" href="#/sources">Sources</a>
+    <a class="tab" data-route="gtm" href="#/gtm">GTM &amp; Flags</a>
+    <span class="tab tab-disabled" title="AI-режим не реализован в этой сборке">AI</span>
+  </nav>
+  <div class="nav-right"><span id="nav-status" class="nav-status"></span></div>
+</header>
+
+<main id="view" class="view">
+  <div class="boot" id="boot">
+    <div class="boot-title">Загрузка базы фактов…</div>
+    <div class="boot-sub" id="boot-sub">analytics.db + sql.js (wasm)</div>
+  </div>
+</main>
+
+<script src="./vendor/sql.js/sql-wasm.js"></script>
+<script src="./vendor/ag-grid-community/ag-grid-community.min.js"></script>
+<script src="./js/util.js"></script>
+<script src="./js/db.js"></script>
+<script src="./js/jinja.js"></script>
+<script src="./js/render.js"></script>
+<script src="./js/grid.js"></script>
+<script src="./js/hints.js"></script>
+<script src="./js/issues.js"></script>
+<script src="./js/events.js"></script>
+<script src="./js/sources.js"></script>
+<script src="./js/gtm.js"></script>
+<script src="./js/app.js"></script>
+</body>
+</html>

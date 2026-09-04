@@ -1,0 +1,538 @@
+{
+ "db": "analytics.db",
+ "snapshot": {
+  "captured_at": "2026-09-03",
+  "web_version": "3.180.0+main",
+  "apk_version": "81",
+  "gtm_container_version": "316"
+ },
+ "tables": {
+  "v_callpoint_fanout": {
+   "type": "view",
+   "rows": 290,
+   "doc": "Сколько систем и событий у точки вызова.",
+   "columns": {
+    "call_point_id": "ссылка на call_point",
+    "layer": "слой точки вызова (см. call_point.layer)",
+    "systems": "число систем",
+    "events": "число строк event",
+    "distinct_names": "число разных имён"
+   },
+   "values": {}
+  },
+  "v_coverage": {
+   "type": "view",
+   "rows": 14,
+   "doc": "Сколько точек вызова и имён получает каждая система.",
+   "columns": {
+    "system_id": "ссылка на system",
+    "title": "название",
+    "call_points": "число точек вызова",
+    "event_names": "число имён"
+   },
+   "values": {}
+  },
+  "v_dl_delivery": {
+   "type": "view",
+   "rows": 266,
+   "doc": "Имя dataLayer → что с ним делает контейнер GTM. dataLayer.push — только вход GTM: тег срабатывает, лишь если триггер контейнера совпал с именем.",
+   "columns": {
+    "event_name": "имя события",
+    "tags_named": "Активные теги с точным триггером на это имя: «вендор: событие у вендора». Пусто = ни один тег имя не слушает, дальше dataLayer оно не уходит.",
+    "ga4": "Имена событий GA4, которые уходят по этому имени dataLayer. Пусто = в GA4 не попадает.",
+    "tags": "Число активных тегов с триггером на это имя.",
+    "catch_all": "Вендоры, чей тег стоит на любое имя dataLayer (триггер {__e} _re .+): получают это имя как своё кастомное событие."
+   },
+   "values": {}
+  },
+  "v_event_full": {
+   "type": "view",
+   "rows": 740,
+   "doc": "Событие + точка вызова + компоненты.",
+   "columns": {
+    "event_id": "id события",
+    "system_id": "ссылка на system",
+    "event_name": "имя события",
+    "naming_style": "стиль имени",
+    "event_version": "event_version литералом",
+    "surface": "surface литералом",
+    "gtm_tagged": "есть активный тег",
+    "layer": "слой точки вызова (см. call_point.layer)",
+    "service": "сервис",
+    "method": "метод",
+    "product": "product",
+    "funnel_name": "funnel_name",
+    "components": "компоненты"
+   },
+   "values": {}
+  },
+  "v_event_params": {
+   "type": "view",
+   "rows": 740,
+   "doc": "Событие со склеенным списком параметров.",
+   "columns": {
+    "event_id": "id события",
+    "system_id": "ссылка на system",
+    "event_name": "имя события",
+    "call_point_id": "ссылка на call_point",
+    "naming_style": "стиль имени",
+    "params": "число параметров",
+    "payload": "name=expr через |"
+   },
+   "values": {}
+  },
+  "v_event_site": {
+   "type": "view",
+   "rows": 2217,
+   "doc": "Событие × место вызова (плоско).",
+   "columns": {
+    "event_id": "id события",
+    "system_id": "ссылка на system",
+    "event_name": "имя события",
+    "kind": "вид",
+    "call_point_id": "ссылка на call_point",
+    "layer": "слой точки вызова (см. call_point.layer)",
+    "service": "сервис",
+    "method": "метод",
+    "call_site_id": "id места вызова",
+    "chunk": "файл сборки",
+    "chunk_label": "читаемое имя чанка",
+    "components": "компоненты",
+    "enclosing_method": "метод-обёртка",
+    "trigger_kind": "триггер",
+    "arg_expr": "аргументы вызова"
+   },
+   "values": {}
+  },
+  "v_gtm_contract": {
+   "type": "view",
+   "rows": 86,
+   "doc": "Что тег читает из dataLayer и несёт ли это событие-триггер.",
+   "columns": {
+    "source_event": "имя события dataLayer из триггера",
+    "tag_id": "id тега GTM",
+    "vendor": "система-приёмник",
+    "vendor_event": "имя у вендора",
+    "paused": "1 = тег на паузе",
+    "slot": "куда кладёт тег",
+    "param": "имя параметра у вендора",
+    "reads_variable": "имя переменной GTM",
+    "source_kind": "тип источника переменной",
+    "event_sends_it": "1 — событие-триггер несёт поле с таким именем; 0 — не несёт; NULL — payload передаётся объектом целиком и состав неизвестен."
+   },
+   "values": {}
+  },
+  "v_gtm_destination": {
+   "type": "view",
+   "rows": 228,
+   "doc": "Событие dataLayer → тег → вендор.",
+   "columns": {
+    "source_event": "имя события dataLayer из триггера",
+    "vendor": "система-приёмник",
+    "vendor_event": "имя у вендора",
+    "ids": "идентификаторы",
+    "consent_categories": "категории согласия",
+    "paused": "1 = тег на паузе",
+    "condition": "условие срабатывания"
+   },
+   "values": {}
+  },
+  "v_journey": {
+   "type": "view",
+   "rows": 73,
+   "doc": "Критический путь × системы.",
+   "columns": {
+    "step_id": "id шага",
+    "stage_no": "порядок стадии",
+    "stage": "стадия пути",
+    "role": "роль шага",
+    "call_point_id": "ссылка на call_point",
+    "note": "пояснение",
+    "dataLayer": "имя в dataLayer",
+    "ga4": "Что из dataLayer этой точки контейнер реально отправляет в GA4. Пусто при заполненном dataLayer = push есть, в GA4 не уходит.",
+    "posthog": "имя в PostHog",
+    "firebase_web": "имя в Firebase web",
+    "native_firebase": "имя в нативном Firebase",
+    "native_facebook": "имя в Facebook SDK",
+    "appsflyer": "имя в AppsFlyer",
+    "customerio": "имя в Customer.io",
+    "gleam": "имя в Gleam",
+    "systems": "число систем"
+   },
+   "values": {}
+  },
+  "v_matrix": {
+   "type": "view",
+   "rows": 290,
+   "doc": "Матрица «точка вызова × система»: имя события в каждой системе.",
+   "columns": {
+    "call_point_id": "ссылка на call_point",
+    "layer": "слой точки вызова (см. call_point.layer)",
+    "service": "сервис",
+    "product": "product",
+    "funnel_name": "funnel_name",
+    "dataLayer": "Что код кладёт в window.dataLayer — вход GTM, не факт доставки. Доставку см. в колонке ga4.",
+    "ga4": "Куда реально доходит push: события GA4, которые контейнер шлёт по dataLayer-именам этой точки. Пусто при заполненном dataLayer = GTM имя не обрабатывает.",
+    "posthog": "имя в PostHog",
+    "firebase_web": "имя в Firebase web",
+    "native_firebase": "имя в нативном Firebase",
+    "native_facebook": "имя в Facebook SDK",
+    "appsflyer": "имя в AppsFlyer",
+    "customerio": "имя в Customer.io",
+    "gleam": "имя в Gleam",
+    "systems": "число систем"
+   },
+   "values": {}
+  },
+  "v_param_conflicts": {
+   "type": "view",
+   "rows": 44,
+   "doc": "Одно имя параметра — разные выражения-значения.",
+   "columns": {
+    "name": "имя",
+    "distinct_exprs": "число разных выражений",
+    "systems": "число систем",
+    "occurrences": "число вхождений",
+    "exprs": "выражения через запятую"
+   },
+   "values": {}
+  },
+  "audit_query": {
+   "type": "table",
+   "rows": 44,
+   "doc": "Готовые SQL-проверки. База содержит только факты; выводы получаются запуском этих запросов.",
+   "columns": {
+    "rule_id": "ключ проверки",
+    "title": "название",
+    "question": "на какой вопрос отвечает",
+    "sql": "SQL, который воспроизводит проверку на этой базе."
+   },
+   "values": {}
+  },
+  "call_point": {
+   "type": "table",
+   "rows": 290,
+   "doc": "Место в коде, которое отправляет событие. Ключ матчинга между системами: одно действие пользователя = одна точка вызова.",
+   "columns": {
+    "call_point_id": "Ключ вида Сервис.метод. Матчинг событий между системами делается по нему, а не по имени события.",
+    "layer": "слой точки вызова (см. call_point.layer)",
+    "service": "сервис",
+    "method": "метод",
+    "signature": "Аргументы метода как в коде (минифицированные имена).",
+    "product": "Значение product в payload, если он задан константой.",
+    "funnel_name": "Значение funnel_name в payload, если задано константой.",
+    "source_chunk": "ES-чанк (или dex-класс), где объявлен метод.",
+    "code_sha1": "sha1 тела метода (первые 16 символов) — для сверки изменений между сборками.",
+    "notes": "факт из кода в свободной форме"
+   },
+   "values": {
+    "layer": {
+     "core_service": "Метод AnalyticsService (chunk-U64X3NAA.js) — веер по нескольким системам.",
+     "product_tracker": "Продуктовый сервис-трекер, шлёт через productFunnelEvent/instantFundsFunnelStep/bankingCardCreationNextStep.",
+     "ad_hoc_push": "Прямой push в dataLayer мимо именованных методов сервиса."
+    }
+   }
+  },
+  "call_site": {
+   "type": "table",
+   "rows": 473,
+   "doc": "Откуда дергается точка вызова: чанк, Angular-компоненты, имя DI-свойства, охватывающий метод и текст аргументов.",
+   "columns": {
+    "call_site_id": "id места вызова",
+    "call_point_id": "ссылка на call_point",
+    "chunk": "файл сборки",
+    "components": "Angular-компоненты чанка по selectors — читаемое имя места вызова.",
+    "receiver": "Имя DI-свойства, через которое дергается сервис (минификация имён свойств не касается).",
+    "enclosing_method": "Метод компонента, внутри которого стоит вызов.",
+    "trigger_kind": "триггер",
+    "arg_expr": "Текст аргументов в точке вызова — часто именно здесь видны допустимые значения (например {theme:\"light\"})."
+   },
+   "values": {
+    "trigger_kind": {
+     "init": "Вызов из ngOnInit/конструктора.",
+     "handler": "Обработчик действия пользователя (onX/click/submit/select/toggle).",
+     "subscription": "Вызов внутри подписки на поток.",
+     "wrapper": "Вызов из собственного метода-обёртки (trackX/sendX/analyticX).",
+     "method": "Прочий метод компонента."
+    }
+   }
+  },
+  "chunk": {
+   "type": "table",
+   "rows": 142,
+   "doc": "Файлы сборки: читаемое имя по Angular-компонентам или сервису-трекеру.",
+   "columns": {
+    "chunk": "файл сборки",
+    "kind": "main — главный бандл; core — AnalyticsService; tracker — продуктовый трекер; lazy — ленивый чанк; dex — APK.",
+    "label": "читаемое имя",
+    "components": "компоненты"
+   },
+   "values": {}
+  },
+  "consent_mode": {
+   "type": "table",
+   "rows": 7,
+   "doc": "Consent Mode из ConsentService главного бандла: дефолт при загрузке, набор «только необходимые», набор «всё разрешено», какое поле формы баннера управляет настройкой.",
+   "columns": {
+    "setting": "настройка Consent Mode",
+    "default_value": "Значение gtag(consent, default) при старте до решения пользователя.",
+    "necessary_value": "значение «только необходимые»",
+    "all_granted_value": "значение «всё разрешено»",
+    "form_field": "поле формы баннера"
+   },
+   "values": {}
+  },
+  "event": {
+   "type": "table",
+   "rows": 740,
+   "doc": "Один факт отправки: событие в конкретную систему из конкретной точки вызова. Одна точка вызова обычно даёт несколько строк.",
+   "columns": {
+    "event_id": "id события",
+    "system_id": "ссылка на system",
+    "event_name": "Имя события в этой системе. У одного действия имена в разных системах часто разные.",
+    "name_is_dynamic": "1 = имя события собирается в рантайме, в коде литерала нет.",
+    "call_point_id": "ссылка на call_point",
+    "naming_style": "стиль имени",
+    "event_version": "Значение параметра event_version, если он передан литералом.",
+    "surface": "Значение параметра surface, если он передан литералом (app | site).",
+    "owox_schema": "1 = push вызван с третьим аргументом true и добавляет схему OWOX BI из null-полей. В снимке 3.180.0 таких вызовов нет ни одного.",
+    "gtm_tagged": "Только для dataLayer: 1 = в контейнере есть активный тег с триггером на это имя; 0 = имя в dataLayer никто не слушает; NULL = система не dataLayer.",
+    "notes": "Факт из кода: ветка условия, состояние воронки, особенность отправки.",
+    "kind": "Вид записи. track — обычное событие; identify/reset/person_properties — управление личностью; bootstrap — служебные push; exception — Sentry; dispatcher — обобщённый метод, имя приходит от трекера."
+   },
+   "values": {
+    "naming_style": {
+     "product_taxonomy": "Имя вида app_* / site_* — новая продуктовая схема.",
+     "legacy": "Историческое имя без единой схемы.",
+     "step_code": "Короткий код шага воронки (step_2, step_5_reject).",
+     "vendor_standard": "Стандартное имя рекламной системы (Purchase, fb_mobile_*, CompleteRegistration).",
+     "action_key": "Ключ действия для AppsFlyer/Gleam (checkout-start, miner-trust)."
+    },
+    "kind": {
+     "track": "Обычное событие с именем.",
+     "identify": "Привязка личности: posthog.identify, analytics.identify, ANALYTICS_USER_ID, auth-for-analytics.",
+     "reset": "Сброс личности при выходе.",
+     "person_properties": "posthog.setPersonProperties.",
+     "bootstrap": "Служебный push gtm.js/gtm.start.",
+     "exception": "Сообщение или исключение в Sentry.",
+     "dispatcher": "Метод-диспетчер (productFunnelEvent, bankingCardCreationNextStep, instantFundsFunnelStep): имя приходит от продуктового трекера, реальные события — в строках трекеров."
+    },
+    "event_name": {
+     "owox_pageview": "visitLogin/visitPage вызывают push(\"page\", {event:\"owox_pageview\",…}); поле event из payload перекрывает имя, в dataLayer уходит owox_pageview."
+    }
+   }
+  },
+  "feature_flag": {
+   "type": "table",
+   "rows": 130,
+   "doc": "Фиче-флаги, A/B-конфигурация, переменные окружения, аллоу-листы и ключи бакетирования.",
+   "columns": {
+    "flag_id": "id флага",
+    "key": "Ключ флага в коде или на бэкенде.",
+    "kind": "вид",
+    "source": "где определён флаг (environment / AbTestsStore / backend)",
+    "resolver": "Как значение вычисляется.",
+    "config_value": "Значение из сборки (для env_var неизвестно — подставляется при деплое).",
+    "buckets": "Пересказ конфига: какой бакет randomNumber получает какое значение.",
+    "targeting": "Дополнительное ограничение: аллоу-лист id или размер списка.",
+    "used_in_chunks": "Сколько чанков ссылаются на ключ и примеры чанков.",
+    "notes": "факт из кода в свободной форме"
+   },
+   "values": {
+    "kind": {
+     "ab_config": "Конфиг раскатки в сборке фронта: значение зависит от randomNumber пользователя.",
+     "geo_config": "Тот же механизм, но условие — страна, а не бакет.",
+     "ab_context_key": "Ключ, который решается на бэкенде: POST {abExperimentsHost}/config/ab-tests/get-user-info.",
+     "ab_flag_usage": "Наблюдаемое свойство AbTestsStore и параметры вызова резолвера.",
+     "env_var": "Переменная окружения сборки (значение в снимке неизвестно).",
+     "env_boolean": "Булев переключатель, зашитый в сборку.",
+     "targeting_list": "Аллоу-лист пользователей/стран; в базе только размер, значения — в raw/environment.js.",
+     "user_bucket": "Поле профиля, по которому идёт распределение (randomNumber, testingGroup)."
+    }
+   }
+  },
+  "field_doc": {
+   "type": "table",
+   "rows": 138,
+   "doc": null,
+   "columns": {
+    "table_name": "таблица",
+    "column_name": "колонка (NULL = описание таблицы)",
+    "value": "значение-перечисление (NULL = описание колонки)",
+    "description": "описание"
+   },
+   "values": {}
+  },
+  "gtm_route": {
+   "type": "table",
+   "rows": 228,
+   "doc": "Условие срабатывания → тег. source_event заполнен, если условие — равенство имени события dataLayer.",
+   "columns": {
+    "route_id": "id правила",
+    "source_event": "Имя события dataLayer из условия срабатывания; NULL, если триггер не по имени события.",
+    "condition": "Полное условие правила контейнера.",
+    "tag_id": "id тега GTM"
+   },
+   "values": {}
+  },
+  "gtm_tag": {
+   "type": "table",
+   "rows": 204,
+   "doc": "Теги контейнера GTM-WQRPRMS: вендор, имя события у вендора, идентификаторы, требуемое согласие, статус паузы.",
+   "columns": {
+    "tag_id": "id тега GTM",
+    "gtm_function": "Внутренний тип тега GTM (__gaawe — событие GA4, __html — свой HTML и т.д.).",
+    "vendor": "Система-приёмник тега.",
+    "vendor_event": "Имя события у вендора (в GA4/Meta/TikTok оно своё).",
+    "ids": "идентификаторы",
+    "consent_categories": "категории согласия",
+    "paused": "1 = тег в контейнере на паузе и не срабатывает.",
+    "notes": "факт из кода в свободной форме"
+   },
+   "values": {}
+  },
+  "gtm_tag_param": {
+   "type": "table",
+   "rows": 152,
+   "doc": "Какие переменные и в какие параметры кладёт тег. Ключ сверки контракта «клиент → GTM → вендор»: см. v_gtm_contract.",
+   "columns": {
+    "tag_id": "id тега GTM",
+    "slot": "event_param — параметр события GA4; user_property — свойство пользователя; config — настройка Google tag; field — поле шаблона вендора (например vtp_transactionValue); html — переменная внутри Custom HTML; event_name — динамическое имя события.",
+    "param": "Имя параметра у вендора (для slot=field — имя поля шаблона без vtp_).",
+    "var_id": "Ссылка на gtm_variable; NULL если значение — литерал (см. literal).",
+    "literal": "литерал вместо переменной"
+   },
+   "values": {}
+  },
+  "gtm_variable": {
+   "type": "table",
+   "rows": 111,
+   "doc": "Переменные (macros) контейнера GTM: откуда тег берёт значение.",
+   "columns": {
+    "var_id": "id переменной GTM",
+    "gtm_function": "тип тега/переменной GTM",
+    "source_kind": "dataLayer — поле dataLayer (vtp_name); js_global — window.*; url — параметр запроса; const; cookie; custom_js; event_name — имя события {{Event}}; auto_event — авто-переменная клика.",
+    "name": "Имя поля dataLayer / JS-переменной / query-параметра / константа.",
+    "details": "прочие настройки (JSON)"
+   },
+   "values": {}
+  },
+  "journey_step": {
+   "type": "table",
+   "rows": 73,
+   "doc": "Разметка критического пути пользователя (landing → signup → login → identify → onboarding → trial → select → checkout → kyc → payment → purchase; token; funding). Это классификация аудитора для навигации и отчётов, а не факт из кода.",
+   "columns": {
+    "step_id": "id шага",
+    "stage_no": "Порядок стадии; несколько точек вызова в одной стадии.",
+    "stage": "стадия пути",
+    "call_point_id": "ссылка на call_point",
+    "role": "view — показ экрана; action — действие пользователя; success — результат достигнут; error — ошибка; identity — управление личностью.",
+    "note": "пояснение"
+   },
+   "values": {}
+  },
+  "param": {
+   "type": "table",
+   "rows": 3436,
+   "doc": "Параметр конкретного события с выражением, из которого берётся значение.",
+   "columns": {
+    "param_id": "id параметра",
+    "event_id": "id события",
+    "name": "Имя параметра в payload. Одно имя в разных событиях может означать разное — см. v_param_conflicts.",
+    "value_expr": "Выражение из кода, дающее значение. Главный признак смысла параметра.",
+    "value_kind": "вид выражения-значения (см. values)",
+    "value_literals": "JSON-массив допустимых значений, когда они видны в коде.",
+    "presence": "всегда / по условию / от вызывающего кода",
+    "pii_class": "класс чувствительности (см. values)",
+    "added_by": "Кто добавил поле в payload."
+   },
+   "values": {
+    "value_kind": {
+     "const": "Литерал в коде — допустимое значение одно, оно в value_literals.",
+     "enum_ternary": "Тернарник с литералами — полный набор значений в value_literals.",
+     "from_argument": "Значение приходит аргументом метода; фактические значения смотреть в call_site.arg_expr.",
+     "client_state": "Берётся из состояния клиента: профиль, окно, локаль, sessionStorage.",
+     "computed": "Вычисляется (map/reduce/join/дата/строка).",
+     "uuid": "crypto.randomUUID() в момент вызова.",
+     "hash": "SHA-256 от значения.",
+     "payload_passthrough": "Payload передаётся объектом целиком из вызывающего кода; состав полей — в call_site.arg_expr.",
+     "expression": "Прочее выражение."
+    },
+    "presence": {
+     "always": "Поле есть в payload всегда.",
+     "conditional": "Добавляется по условию (например user_id только для залогиненного).",
+     "from_caller": "Приходит от вызывающего кода."
+    },
+    "pii_class": {
+     "pseudo_id": "Псевдонимный идентификатор: user_id, cid, appsflyerId, рекламные id.",
+     "hashed_pii": "Хеш персональных данных (email, телефон).",
+     "wallet_address": "Адрес кошелька.",
+     "coupon": "Промокод.",
+     "free_text": "Свободный текст, введённый пользователем.",
+     "none": "Ничего из перечисленного.",
+     "plain_pii": "Персональные данные открытым текстом (email, телефон)."
+    },
+    "added_by": {
+     "call_point": "Поле явно задано в методе точки вызова.",
+     "dispatcher": "Поле добавляет диспетчер productFunnelEvent (user_id к копии для dataLayer).",
+     "transport": "Поле добавляет транспорт: cid в push() для dataLayer, конверт устройства в appsFlyer()."
+    }
+   }
+  },
+  "snapshot": {
+   "type": "table",
+   "rows": 1,
+   "doc": "Один снимок продукта: версии веба и APK, база CDN, контейнер GTM, сколько чанков обошли.",
+   "columns": {
+    "id": "id",
+    "captured_at": "Дата снятия фактов.",
+    "web_version": "Версия веб-клиента из environment.buildVersion.",
+    "cdn_base": "База, с которой грузятся ES-чанки.",
+    "apk_package": "пакет APK",
+    "apk_version": "versionCode/versionName APK из manifest.json XAPK.",
+    "gtm_container": "id контейнера GTM",
+    "gtm_container_version": "Версия контейнера GTM на момент скачивания.",
+    "chunks_crawled": "Сколько ES-чанков обошли по графу импортов.",
+    "notes": "факт из кода в свободной форме"
+   },
+   "values": {}
+  },
+  "source_file": {
+   "type": "table",
+   "rows": 11,
+   "doc": "Файлы-исходники в analytics/raw/, по которым собраны факты, с sha256.",
+   "columns": {
+    "path": "путь в analytics/raw",
+    "kind": "вид",
+    "origin_url": "откуда скачан",
+    "bytes": "размер",
+    "sha256": "Первые 32 символа sha256 — для сверки при повторном снятии.",
+    "role": "Что это за файл в разборе."
+   },
+   "values": {}
+  },
+  "system": {
+   "type": "table",
+   "rows": 14,
+   "doc": "Системы-приёмники данных и их конфигурация из кода.",
+   "columns": {
+    "system_id": "Короткий ключ системы, на него ссылается event.system_id.",
+    "title": "название",
+    "kind": "product analytics | tag manager | attribution | crm | apm | session replay | ad pixel | campaign tool | support",
+    "transport": "Как данные уходят: SDK по HTTP, window.dataLayer, нативный мост, server-to-server через бэкенд, скрипт на странице.",
+    "endpoint": "Куда физически уходят данные.",
+    "ids": "Публичные клиентские идентификаторы: ключи проектов, пиксели, контейнеры.",
+    "identity_key": "Чем система опознаёт пользователя.",
+    "gating": "Условия в коде, при которых система не получает событий.",
+    "consent_categories": "Категории Consent Mode, которые требуются тегам этой системы.",
+    "in_apk": "1 = SDK этой системы присутствует в APK io.gmt.app.twa.",
+    "notes": "факт из кода в свободной форме"
+   },
+   "values": {
+    "system_id": {
+     "native_auth_bridge": "Сообщение auth-for-analytics в нативную обёртку с userId, email, phone; нативный обработчик не извлечён."
+    }
+   }
+  }
+ }
+}

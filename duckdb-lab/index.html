@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>duckdb-wasm lab</title>
+<style>
+  :root { color-scheme: dark }
+  html, body { margin: 0; background: #0d1117; color: #d6dde4;
+               font: 14px/1.45 ui-monospace, 'JetBrains Mono', Consolas, monospace }
+  header { padding: 14px 18px 10px; border-bottom: 1px solid #223 }
+  h1 { margin: 0 0 2px; font-size: 16px; font-weight: 600; color: #9ecbff }
+  h1 small { color: #56606a; font-weight: 400 }
+  #banner { margin: 10px 18px 0; padding: 8px 12px; border: 1px solid #7a2e2e;
+            background: #2a1215; color: #ff9f9f; border-radius: 6px; display: none }
+  #banner b { color: #ffd0d0 }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 18px }
+  select, button { font: inherit; background: #161d26; color: #d6dde4; border: 1px solid #2c3a4a;
+                   border-radius: 6px; padding: 6px 12px; cursor: pointer }
+  button:hover { border-color: #4a6a8a } button:disabled { opacity: .4; cursor: default }
+  button.primary { background: #14324a; border-color: #2a6a9a }
+  #log { margin: 6px 18px 24px; border: 1px solid #223; border-radius: 6px; background: #0a0e13;
+         padding: 10px 12px; min-height: 200px; white-space: pre-wrap; overflow-x: auto }
+  .row { display: flex; gap: 10px }
+  .row .t { color: #4d5a66; flex: none; width: 88px; text-align: right }
+  .ok { color: #7ee08a } .err { color: #ff8080 } .step { color: #79c0ff } .info { color: #9aa7b3 }
+  .warn { color: #e0c07e }
+  details { margin: 8px 18px } summary { cursor: pointer; color: #9aa7b3 }
+  #prevlog { border: 1px dashed #333; border-radius: 6px; padding: 8px 12px; margin-top: 6px;
+             color: #8a949e; white-space: pre-wrap }
+</style>
+
+<header>
+  <h1>duckdb-wasm lab <small>— standalone, zero app dependencies; nothing runs until you press a button</small></h1>
+</header>
+<div id="banner"></div>
+<details id="prevwrap" style="display:none"><summary>previous session log</summary><div id="prevlog"></div></details>
+<div class="controls">
+  bundle: <select id="bundle"><option value="eh">eh</option><option value="mvp">mvp</option></select>
+  <button id="b1">1 · fetch</button>
+  <button id="b2">2 · compile main</button>
+  <button id="b3">3 · compile worker</button>
+  <button id="b4">4 · instantiate raw</button>
+  <button id="b14" class="primary">1→4 safe probes</button>
+  <button id="b5" class="primary">5 · boot (worker)</button>
+  <button id="b6">6 · boot (main thread)</button>
+  <button id="b7" class="primary">7 · perf test</button>
+  <button id="bClear">clear log</button>
+</div>
+<div id="log"></div>
+
+<script type="importmap">
+{ "imports": {
+    "apache-arrow": "./vendor/apache-arrow/Arrow.dom.mjs",
+    "flatbuffers": "./vendor/flatbuffers/flatbuffers.js",
+    "tslib": "./vendor/tslib/tslib.es6.js"
+} }
+</script>
+
+<script type="module">
+/* Standalone DuckDB-WASM debugging lab.
+   Design constraints, learned the hard way on WebKitGTK:
+   - the engine under test can KILL the web process (SIGILL in the wasm JIT), so
+     every log line is persisted to localStorage synchronously the moment it is
+     written — the next load shows where the previous run stopped;
+   - nothing dangerous runs automatically: the page only probes the environment
+     at load, every real step is a button;
+   - steps are SEPARATED (fetch / compile / raw instantiate / boot / query), so a
+     process death names its exact stage instead of "the page hangs". */
+
+const logEl = document.getElementById('log')
+const t0 = performance.now()
+const KEY = 'duckdb-lab:log'
+let stored = []
+
+function persist() {
+  try { localStorage.setItem(KEY, JSON.stringify(stored.slice(-400))) } catch { /* full/blocked */ }
+}
+function log(msg, cls = 'info') {
+  const t = (performance.now() - t0).toFixed(1)
+  const row = document.createElement('div')
+  row.className = 'row'
+  row.innerHTML = '<span class="t">+' + t + 'ms</span><span class="' + cls + '"></span>'
+  row.lastChild.textContent = msg
+  logEl.appendChild(row)
+  row.scrollIntoView({ block: 'nearest' })
+  stored.push({ t, cls, msg })
+  persist()
+  return row.lastChild
+}
+
+/* ---- previous-session forensics -------------------------------------------
+   An abruptly-ended log (no closing marker = the web process died mid-step) is
+   copied to its own key, so the evidence SURVIVES any number of ordinary page
+   loads until the user presses "clear log". */
+const CRASH = 'duckdb-lab:lastcrash'
+try {
+  const prev = JSON.parse(localStorage.getItem(KEY) || '[]')
+  if (prev.length && prev[prev.length - 1].msg !== '· session closed normally') {
+    localStorage.setItem(CRASH, JSON.stringify(prev))
+  }
+  const crash = JSON.parse(localStorage.getItem(CRASH) || 'null')
+  if (crash && crash.length) {
+    const b = document.getElementById('banner')
+    b.style.display = 'block'
+    b.innerHTML = 'a previous session ended <b>abruptly</b> (process death). Last step before dying: <b></b>'
+    b.querySelector('b:last-child').textContent = crash[crash.length - 1].msg
+    const pw = document.getElementById('prevwrap')
+    pw.style.display = 'block'
+    document.getElementById('prevlog').textContent =
+      crash.map((e) => '+' + e.t + 'ms  ' + e.msg).join('\n')
+  }
+} catch { /* corrupt store */ }
+stored = []
+persist()
+addEventListener('pagehide', () => { log('· session closed normally') })
+
+/* ---- environment probes (safe, automatic) --------------------------------- */
+const V = (bytes) => { try { return WebAssembly.validate(new Uint8Array(bytes)) } catch { return false } }
+const FEAT = {
+  simd: V([0,97,115,109,1,0,0,0,1,5,1,96,0,1,123,3,2,1,0,10,10,1,8,0,65,0,253,15,253,98,11]),
+  exceptions: V([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,8,1,6,0,6,64,25,11,11]),
+  threads: V([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,5,4,1,3,1,1,10,11,1,9,0,65,0,254,16,2,0,26,11]),
+  bulk: V([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,5,3,1,0,1,10,14,1,12,0,65,0,65,0,65,0,252,10,0,0,11]),
+  tailcall: V([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,6,1,4,0,18,0,11]),
+}
+log('ua: ' + navigator.userAgent)
+log('cores: ' + navigator.hardwareConcurrency + ' · dpr: ' + devicePixelRatio +
+    ' · crossOriginIsolated: ' + String(globalThis.crossOriginIsolated === true))
+log('wasm probes (validate): ' + Object.entries(FEAT).map(([k, v]) => k + '=' + (v ? '✓' : '✗')).join('  '))
+if (!FEAT.simd && /AppleWebKit/.test(navigator.userAgent) && !/Chrom/.test(navigator.userAgent))
+  log('simd=✗ on x86-64 WebKit means JSC sees no AVX on this CPU — but its BBQ JIT stays on and emits AVX code anyway: steps 5/6 WILL kill this tab at the first wasm tier-up. (Launching the browser with JSC_useBBQJIT=0 makes them pass.)', 'warn')
+log('ready — nothing else runs by itself. Steps 1–4 cannot boot the database; 5/6 run the real engine.', 'step')
+
+/* ---- shared state --------------------------------------------------------- */
+const S = { bytes: null, bytesFor: null, module: null, moduleFor: null, conn: null, connKind: null }
+const bundle = () => document.getElementById('bundle').value
+const wasmUrl = (b) => new URL('./duckdb-' + b + '.wasm', location.href).href
+const fmtMB = (n) => (n / 1e6).toFixed(1) + 'MB'
+
+async function step(name, fn) {
+  const btns = document.querySelectorAll('button')
+  btns.forEach((b) => (b.disabled = true))
+  log('▶ ' + name, 'step')
+  const t = performance.now()
+  try {
+    await fn()
+    log('✓ ' + name + ' — ' + (performance.now() - t).toFixed(1) + 'ms', 'ok')
+  } catch (e) {
+    log('✗ ' + name + ' — ' + String(e).slice(0, 300), 'err')
+  } finally {
+    btns.forEach((b) => (b.disabled = false))
+  }
+}
+
+/* ---- 1 · fetch ------------------------------------------------------------ */
+async function doFetch() {
+  const b = bundle()
+  const t = performance.now()
+  const res = await fetch(wasmUrl(b))
+  if (!res.ok) throw new Error('http ' + res.status)
+  S.bytes = await res.arrayBuffer()
+  S.bytesFor = b
+  log('fetched ' + b + ': ' + fmtMB(S.bytes.byteLength) + ' in ' + (performance.now() - t).toFixed(1) + 'ms')
+}
+
+/* ---- 2 · compile on the main thread --------------------------------------- */
+async function doCompileMain() {
+  if (!S.bytes || S.bytesFor !== bundle()) await doFetch()
+  const t = performance.now()
+  S.module = await WebAssembly.compile(S.bytes)
+  S.moduleFor = bundle()
+  log('compiled on main in ' + (performance.now() - t).toFixed(1) + 'ms · imports: ' +
+      WebAssembly.Module.imports(S.module).length + ' · exports: ' + WebAssembly.Module.exports(S.module).length)
+}
+
+/* ---- 3 · compile inside a worker ------------------------------------------ */
+function doCompileWorker() {
+  return new Promise((resolve, reject) => {
+    const code = [
+      "onmessage = async (e) => {",
+      "  try {",
+      "    const t = performance.now()",
+      "    const buf = await (await fetch(e.data)).arrayBuffer()",
+      "    const tc = performance.now()",
+      "    await WebAssembly.compile(buf)",
+      "    postMessage({ ok: true, fetchMs: (tc - t).toFixed(1), compileMs: (performance.now() - tc).toFixed(1) })",
+      "  } catch (err) { postMessage({ ok: false, err: String(err).slice(0, 200) }) }",
+      "}",
+    ].join('\n')
+    const w = new Worker(URL.createObjectURL(new Blob([code], { type: 'text/javascript' })))
+    const timer = setTimeout(() => { w.terminate(); reject(new Error('worker silent for 120s')) }, 120000)
+    w.onmessage = (e) => {
+      clearTimeout(timer); w.terminate()
+      if (e.data.ok) { log('worker: fetch ' + e.data.fetchMs + 'ms, compile ' + e.data.compileMs + 'ms'); resolve() }
+      else reject(new Error(e.data.err))
+    }
+    w.onerror = (e) => { clearTimeout(timer); w.terminate(); reject(new Error('worker error: ' + e.message)) }
+    w.postMessage(wasmUrl(bundle()))
+  })
+}
+
+/* ---- 4 · raw instantiate with stub imports (no wasm code runs) ------------ */
+async function doRawInstantiate() {
+  if (!S.module || S.moduleFor !== bundle()) await doCompileMain()
+  // Engines without wasm type reflection (no im.type) make stub globals a
+  // guessing game — so guesses are corrected from the LinkError text and
+  // retried until the engine is satisfied.
+  const flipped = new Set()
+  const build = () => {
+    const imports = {}
+    for (const im of WebAssembly.Module.imports(S.module)) {
+      const m = (imports[im.module] = imports[im.module] || {})
+      if (im.kind === 'function') m[im.name] = () => 0
+      else if (im.kind === 'memory') m[im.name] = new WebAssembly.Memory({ initial: 256, maximum: 65536 })
+      else if (im.kind === 'global') {
+        // emscripten's imported globals are overwhelmingly mutable, so that is
+        // the reflection-less default; complaints flip individual names
+        const mut = im.type ? !!im.type.mutable : !flipped.has(im.name)
+        m[im.name] = new WebAssembly.Global({ value: (im.type && im.type.value) || 'i32', mutable: mut }, 0)
+      } else if (im.kind === 'tag') m[im.name] = new WebAssembly.Tag(im.type || { parameters: ['i32'] })
+      else if (im.kind === 'table') m[im.name] = new WebAssembly.Table(im.type && im.type.minimum !== undefined
+        ? { element: 'anyfunc', initial: im.type.minimum, maximum: im.type.maximum } : { element: 'anyfunc', initial: 40000 })
+    }
+    return imports
+  }
+  const t = performance.now()
+  let inst = null
+  let lastErr = null
+  for (let round = 0; round < 500 && !inst; round++) {
+    try {
+      inst = await WebAssembly.instantiate(S.module, build())
+    } catch (e) {
+      lastErr = e
+      const m = /["']?(\w+)["']?[^"']*mutab|mutab[^"']*["'](\w+)["']/.exec(String(e))
+      const name = (m && (m[1] || m[2])) || null
+      if (e instanceof WebAssembly.LinkError && name && !flipped.has(name)) {
+        flipped.add(name)
+        continue
+      }
+      throw e
+    }
+  }
+  if (!inst) throw lastErr || new Error('gave up after 500 rounds')
+  log('instantiated (stub imports, zero calls) in ' + (performance.now() - t).toFixed(1) + 'ms · exports: ' +
+      Object.keys(inst.exports).length + (flipped.size ? ' · mutability guessed for: ' + [...flipped].join(', ') : ''))
+  log('note: no duckdb code has EXECUTED yet — that is what steps 5/6 add', 'warn')
+}
+
+/* ---- 5 · full boot through the real worker -------------------------------- */
+async function doBootWorker() {
+  const b = bundle()
+  log('importing duckdb-browser.mjs …')
+  const duckdb = await import('./duckdb-browser.mjs')
+  log('spawning ' + 'duckdb-browser-' + b + '.worker.js …')
+  const worker = new Worker(new URL('./duckdb-browser-' + b + '.worker.js', location.href))
+  const db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker)
+  log('instantiate(' + b + ') — the first EXECUTION of duckdb wasm happens here', 'warn')
+  const t = performance.now()
+  await db.instantiate(wasmUrl(b))
+  log('instantiate done in ' + (performance.now() - t).toFixed(1) + 'ms')
+  const conn = await db.connect()
+  const r = await conn.query('select 6*7 as v')
+  log('sanity query: 6*7 = ' + r.toArray()[0].v)
+  S.conn = conn; S.connKind = 'worker'
+}
+
+/* ---- 6 · full boot on the main thread (blocking variant) ------------------ */
+async function doBootMain() {
+  const b = bundle()
+  log('importing duckdb-browser-blocking.mjs …')
+  const duckdb = await import('./duckdb-browser-blocking.mjs')
+  const bundles = {}
+  bundles[b] = { mainModule: wasmUrl(b) }
+  log('createDuckDB + instantiate on MAIN thread — first duckdb execution', 'warn')
+  const t = performance.now()
+  const db = await duckdb.createDuckDB(bundles, new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), duckdb.BROWSER_RUNTIME)
+  await db.instantiate(() => {})
+  log('instantiate done in ' + (performance.now() - t).toFixed(1) + 'ms')
+  const conn = db.connect()
+  const r = conn.query('select 6*7 as v')
+  log('sanity query: 6*7 = ' + r.toArray()[0].v)
+  S.conn = conn; S.connKind = 'blocking'
+}
+
+/* ---- 7 · a deliberately simple perf test ---------------------------------- */
+const PERF = [
+  ['scan+agg 5M', 'SELECT count(*) c, sum(i) s, avg(i) a FROM range(5000000) t(i)'],
+  ['group by 2M', 'SELECT i % 997 k, count(*) c FROM range(2000000) t(i) GROUP BY k ORDER BY c DESC LIMIT 5'],
+  ['join 500k', 'SELECT count(*) c FROM range(500000) a(i) JOIN range(500000) b(j) ON a.i = b.j'],
+  ['scan+agg 5M again (warm)', 'SELECT count(*) c, sum(i) s, avg(i) a FROM range(5000000) t(i)'],
+]
+async function doPerf() {
+  if (!S.conn) { log('no connection — run step 5 or 6 first', 'warn'); return }
+  log('perf on the ' + S.connKind + ' connection, bundle ' + bundle())
+  let total = 0
+  for (const [name, sql] of PERF) {
+    const t = performance.now()
+    const res = S.connKind === 'worker' ? await S.conn.query(sql) : S.conn.query(sql)
+    const ms = performance.now() - t
+    total += ms
+    const first = res.toArray()[0]
+    log('  ' + name + ': ' + ms.toFixed(1) + 'ms  → ' + JSON.stringify(first, (k, v) => typeof v === 'bigint' ? String(v) : v).slice(0, 90))
+  }
+  log('perf total: ' + total.toFixed(1) + 'ms', 'ok')
+}
+
+/* ---- wiring --------------------------------------------------------------- */
+document.getElementById('b1').onclick = () => step('fetch ' + bundle(), doFetch)
+document.getElementById('b2').onclick = () => step('compile main (' + bundle() + ')', doCompileMain)
+document.getElementById('b3').onclick = () => step('compile worker (' + bundle() + ')', doCompileWorker)
+document.getElementById('b4').onclick = () => step('raw instantiate (' + bundle() + ')', doRawInstantiate)
+document.getElementById('b14').onclick = async () => {
+  await step('fetch ' + bundle(), doFetch)
+  await step('compile main (' + bundle() + ')', doCompileMain)
+  await step('compile worker (' + bundle() + ')', doCompileWorker)
+  await step('raw instantiate (' + bundle() + ')', doRawInstantiate)
+}
+document.getElementById('b5').onclick = () => step('boot via worker (' + bundle() + ')', doBootWorker)
+document.getElementById('b6').onclick = () => step('boot on main thread (' + bundle() + ')', doBootMain)
+document.getElementById('b7').onclick = () => step('perf', doPerf)
+document.getElementById('bClear').onclick = () => {
+  logEl.textContent = ''; stored = []; persist()
+  try { localStorage.removeItem(CRASH) } catch { /* blocked */ }
+  document.getElementById('banner').style.display = 'none'
+  document.getElementById('prevwrap').style.display = 'none'
+}
+</script>
+</html>

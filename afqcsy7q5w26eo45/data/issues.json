@@ -1,0 +1,2021 @@
+{
+ "generated_at": "2026-09-04T11:39:59Z",
+ "snapshot": {
+  "id": 1,
+  "captured_at": "2026-09-03",
+  "web_version": "3.180.0+main",
+  "cdn_base": "https://edge-media.gomining.com/main-gomining-xxw3ek/client-next/",
+  "apk_package": "io.gmt.app.twa",
+  "apk_version": "81",
+  "gtm_container": "GTM-WQRPRMS",
+  "gtm_container_version": "316",
+  "chunks_crawled": 2168,
+  "notes": "Статический разбор: ES-чанки CDN, контейнер GTM, декомпиляция APK (androguard)."
+ },
+ "schema": {
+  "audit_query": {
+   "type": "table",
+   "columns": [
+    "rule_id",
+    "title",
+    "question",
+    "sql"
+   ],
+   "rows": 44
+  },
+  "call_point": {
+   "type": "table",
+   "columns": [
+    "call_point_id",
+    "layer",
+    "service",
+    "method",
+    "signature",
+    "product",
+    "funnel_name",
+    "source_chunk",
+    "code_sha1",
+    "notes"
+   ],
+   "rows": 290
+  },
+  "call_site": {
+   "type": "table",
+   "columns": [
+    "call_site_id",
+    "call_point_id",
+    "chunk",
+    "components",
+    "receiver",
+    "enclosing_method",
+    "trigger_kind",
+    "arg_expr"
+   ],
+   "rows": 473
+  },
+  "chunk": {
+   "type": "table",
+   "columns": [
+    "chunk",
+    "kind",
+    "label",
+    "components"
+   ],
+   "rows": 142
+  },
+  "consent_mode": {
+   "type": "table",
+   "columns": [
+    "setting",
+    "default_value",
+    "necessary_value",
+    "all_granted_value",
+    "form_field"
+   ],
+   "rows": 7
+  },
+  "event": {
+   "type": "table",
+   "columns": [
+    "event_id",
+    "system_id",
+    "event_name",
+    "name_is_dynamic",
+    "call_point_id",
+    "naming_style",
+    "event_version",
+    "surface",
+    "owox_schema",
+    "gtm_tagged",
+    "notes",
+    "kind"
+   ],
+   "rows": 740
+  },
+  "feature_flag": {
+   "type": "table",
+   "columns": [
+    "flag_id",
+    "key",
+    "kind",
+    "source",
+    "resolver",
+    "config_value",
+    "buckets",
+    "targeting",
+    "used_in_chunks",
+    "notes"
+   ],
+   "rows": 130
+  },
+  "field_doc": {
+   "type": "table",
+   "columns": [
+    "table_name",
+    "column_name",
+    "value",
+    "description"
+   ],
+   "rows": 138
+  },
+  "gtm_route": {
+   "type": "table",
+   "columns": [
+    "route_id",
+    "source_event",
+    "condition",
+    "tag_id"
+   ],
+   "rows": 228
+  },
+  "gtm_tag": {
+   "type": "table",
+   "columns": [
+    "tag_id",
+    "gtm_function",
+    "vendor",
+    "vendor_event",
+    "ids",
+    "consent_categories",
+    "paused",
+    "notes"
+   ],
+   "rows": 204
+  },
+  "gtm_tag_param": {
+   "type": "table",
+   "columns": [
+    "tag_id",
+    "slot",
+    "param",
+    "var_id",
+    "literal"
+   ],
+   "rows": 152
+  },
+  "gtm_variable": {
+   "type": "table",
+   "columns": [
+    "var_id",
+    "gtm_function",
+    "source_kind",
+    "name",
+    "details"
+   ],
+   "rows": 111
+  },
+  "journey_step": {
+   "type": "table",
+   "columns": [
+    "step_id",
+    "stage_no",
+    "stage",
+    "call_point_id",
+    "role",
+    "note"
+   ],
+   "rows": 73
+  },
+  "param": {
+   "type": "table",
+   "columns": [
+    "param_id",
+    "event_id",
+    "name",
+    "value_expr",
+    "value_kind",
+    "value_literals",
+    "presence",
+    "pii_class",
+    "added_by"
+   ],
+   "rows": 3436
+  },
+  "snapshot": {
+   "type": "table",
+   "columns": [
+    "id",
+    "captured_at",
+    "web_version",
+    "cdn_base",
+    "apk_package",
+    "apk_version",
+    "gtm_container",
+    "gtm_container_version",
+    "chunks_crawled",
+    "notes"
+   ],
+   "rows": 1
+  },
+  "source_file": {
+   "type": "table",
+   "columns": [
+    "path",
+    "kind",
+    "origin_url",
+    "bytes",
+    "sha256",
+    "role"
+   ],
+   "rows": 11
+  },
+  "system": {
+   "type": "table",
+   "columns": [
+    "system_id",
+    "title",
+    "kind",
+    "transport",
+    "endpoint",
+    "ids",
+    "identity_key",
+    "gating",
+    "consent_categories",
+    "in_apk",
+    "notes"
+   ],
+   "rows": 14
+  },
+  "v_callpoint_fanout": {
+   "type": "view",
+   "columns": [
+    "call_point_id",
+    "layer",
+    "systems",
+    "events",
+    "distinct_names"
+   ],
+   "rows": 290
+  },
+  "v_coverage": {
+   "type": "view",
+   "columns": [
+    "system_id",
+    "title",
+    "call_points",
+    "event_names"
+   ],
+   "rows": 14
+  },
+  "v_dl_delivery": {
+   "type": "view",
+   "columns": [
+    "event_name",
+    "tags_named",
+    "ga4",
+    "tags",
+    "catch_all"
+   ],
+   "rows": 266
+  },
+  "v_event_full": {
+   "type": "view",
+   "columns": [
+    "event_id",
+    "system_id",
+    "event_name",
+    "naming_style",
+    "event_version",
+    "surface",
+    "gtm_tagged",
+    "layer",
+    "service",
+    "method",
+    "product",
+    "funnel_name",
+    "components"
+   ],
+   "rows": 740
+  },
+  "v_event_params": {
+   "type": "view",
+   "columns": [
+    "event_id",
+    "system_id",
+    "event_name",
+    "call_point_id",
+    "naming_style",
+    "params",
+    "payload"
+   ],
+   "rows": 740
+  },
+  "v_event_site": {
+   "type": "view",
+   "columns": [
+    "event_id",
+    "system_id",
+    "event_name",
+    "kind",
+    "call_point_id",
+    "layer",
+    "service",
+    "method",
+    "call_site_id",
+    "chunk",
+    "chunk_label",
+    "components",
+    "enclosing_method",
+    "trigger_kind",
+    "arg_expr"
+   ],
+   "rows": 2217
+  },
+  "v_gtm_contract": {
+   "type": "view",
+   "columns": [
+    "source_event",
+    "tag_id",
+    "vendor",
+    "vendor_event",
+    "paused",
+    "slot",
+    "param",
+    "reads_variable",
+    "source_kind",
+    "event_sends_it"
+   ],
+   "rows": 86
+  },
+  "v_gtm_destination": {
+   "type": "view",
+   "columns": [
+    "source_event",
+    "vendor",
+    "vendor_event",
+    "ids",
+    "consent_categories",
+    "paused",
+    "condition"
+   ],
+   "rows": 228
+  },
+  "v_journey": {
+   "type": "view",
+   "columns": [
+    "step_id",
+    "stage_no",
+    "stage",
+    "role",
+    "call_point_id",
+    "note",
+    "dataLayer",
+    "ga4",
+    "posthog",
+    "firebase_web",
+    "native_firebase",
+    "native_facebook",
+    "appsflyer",
+    "customerio",
+    "gleam",
+    "systems"
+   ],
+   "rows": 73
+  },
+  "v_matrix": {
+   "type": "view",
+   "columns": [
+    "call_point_id",
+    "layer",
+    "service",
+    "product",
+    "funnel_name",
+    "dataLayer",
+    "ga4",
+    "posthog",
+    "firebase_web",
+    "native_firebase",
+    "native_facebook",
+    "appsflyer",
+    "customerio",
+    "gleam",
+    "systems"
+   ],
+   "rows": 290
+  },
+  "v_param_conflicts": {
+   "type": "view",
+   "columns": [
+    "name",
+    "distinct_exprs",
+    "systems",
+    "occurrences",
+    "exprs"
+   ],
+   "rows": 44
+  }
+ },
+ "issues": [
+  {
+   "num": "01",
+   "slug": "purchase-not-in-gtm",
+   "file": "01-purchase-not-in-gtm.md",
+   "title": "Покупка расходится между системами: PostHog, Firebase и Facebook SDK получают её из клиента, dataLayer — только ThankYouPage, и теги на нём читают поля, которых в событии нет",
+   "severity": 9,
+   "hours": 12,
+   "hours_detail": "фронт 5, GTM 4, QA 3",
+   "stages": [
+    "purchase",
+    "token"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Одно и то же действие — успешная оплата — из одной точки вызова уходит в разный набор систем. <code>purchaseNft</code> шлёт <code>purchase</code> с <code>value</code>, <code>currency</code>, <code>transaction_id</code>, <code>items</code> в PostHog, Firebase (web и native) и <code>Purchase</code> в Facebook SDK, но в <code>dataLayer</code> из той же точки не уходит ничего. То же для <code>upgradeNft</code> и <code>purchaseToken</code>. GTM получает при покупке только <code>ThankYouPage</code> с payload <code>{type, value}</code> — событие с другим именем, другим составом полей и другой суммой (см. 03). Событие <code>purchases</code> в dataLayer — не покупка: это показ списка истории покупок (<code>eventAction: \"show\"</code>, <code>eventLabel: \"purchaseHistory\"</code>) с массивом всех прошлых покупок в формате UA-impressions; ни один тег GTM его не слушает. Теги, повешенные на <code>ThankYouPage</code>, ждут переменные <code>valueUsdt</code>, <code>conversionValue</code>, <code>user_id</code>, которых в этом событии нет. Тег Reddit <code>Purchase</code> стоит на имени <code>purchase</code>, которого в <code>dataLayer</code> не бывает.</p>\n<p>Это не утверждение «покупки нет в GA4»: серверная отправка (GA4 Measurement Protocol, Meta CAPI) из клиента не видна и могла бы закрывать часть пробела — это вопрос команде. Факт, который виден из TWA, — несогласованность: пять систем получают покупку с полной ecommerce-структурой, шестая (и через неё все рекламные пиксели) — суррогат с поломанным контрактом.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>v_journey</code>, стадия purchase: <code>purchaseNft</code> → posthog, firebase_web, native_firebase, native_facebook, gleam; <code>dataLayer</code> пусто. <code>upgradeNft</code> → posthog, firebase_web, native_firebase, native_facebook; <code>purchaseToken</code> → posthog (два имени), firebase_web, native_firebase, native_facebook. Ни у одного нет строки <code>gtm_datalayer</code>.</li><li><code>AnalyticsService.purchases(e)</code> (событие 90, dataLayer <code>purchases</code>): <code>eventCategory: \"Non-Interactions\"</code>, <code>eventAction: \"show\"</code>, <code>eventLabel: \"purchaseHistory\"</code>, <code>pageType: \"Profile\"</code>, <code>page: \"Buy GMT\"</code>, <code>ecommerce.impressions = e.map(...)</code> — по одной записи на каждую прошлую покупку (<code>id: createdAt</code>, <code>price: value</code>, <code>category: currency</code>, <code>variant: status</code>, <code>dimension21…26</code>). Вызывается из загрузчика списка (<code>findByUser</code>), в разметке пути <code>role = view</code>. В <code>gtm_route</code> нет ни одного условия на <code>purchases</code>. PostHog-двойник (событие 91) несёт только <code>count: e.length</code>.</li><li>Для сравнения предыдущие шаги того же пути (<code>checkout-start</code>, <code>checkout-payment</code>, <code>purchase_try_nft</code>) уходят и в dataLayer, и в PostHog, и в Firebase — веер обрывается ровно на покупке.</li><li><code>ThankYouPage</code> в dataLayer несёт <code>type</code> (<code>nft | upgrade | token</code>), <code>value</code>, <code>cid</code>. Ни <code>currency</code>, ни <code>transaction_id</code>, ни <code>items</code>, которые в тех же точках уже собраны для Firebase/PostHog.</li><li><code>v_gtm_contract</code> для <code>ThankYouPage</code>, <code>event_sends_it = 0</code>: GA4 <code>ty_purchase</code> (тег 290) — <code>value</code> ← переменная <code>valueUsdt</code>; AdRoll (291) — <code>user_id</code>, <code>valueUsdt</code>; TikTok <code>CompletePayment</code> (338) — <code>conversionValue</code>; X Ads (429) — <code>valueUsdt</code>.</li><li>GA4-тег 290: <code>sendEcommerceData = false</code>, параметры только <code>type</code> и <code>value</code>.</li><li>StackAdapt (434): <code>revenue:\"{revenue}\"</code> — литерал-заглушка в HTML.</li><li>Reddit <code>Purchase</code> (411): триггер <code>{__e} _eq purchase</code>; в dataLayer имя <code>purchase</code> не производится ни одной точкой вызова (<code>gtm_tag_without_producer</code>).</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<p>Независимо от того, есть ли серверная отправка:</p>\n<ul><li>Клиентские пиксели (TikTok, X, AdRoll, LinkedIn, StackAdapt) получают конверсию без суммы: тег читает <code>valueUsdt</code>/<code>conversionValue</code>, событие несёт <code>value</code>. Серверный канал это не чинит — пиксели живут в браузере.</li><li>Reddit-пиксель не получает покупок вообще.</li><li>PostHog и GA4 нельзя сверить по покупкам: разные имена (<code>purchase</code> / <code>ty_purchase</code>), разные суммы (каталожная / сокетная), в GA4 нет <code>transaction_id</code> для дедупликации с чем бы то ни было.</li></ul>\n<p>Если серверной отправки в GA4 нет (из клиента её не видно):</p>\n<ul><li>В GA4 нет <code>purchase</code> и выручки — ни e-commerce отчётов, ни ROAS в Google Ads, ни LTV по каналам; задним числом не восстанавливается.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Сделать веер покупки таким же, как у остальных шагов: в <code>purchaseNft</code>, <code>upgradeNft</code>, <code>purchaseToken</code> добавить <code>push(\"purchase\", {ecommerce:{transaction_id, value, currency:\"USD\", items}})</code> — тот же объект <code>c</code>, что уже собирается для Firebase и PostHog.</li><li>В GTM: тег GA4 <code>purchase</code> с <code>sendEcommerceData = true</code>; переменные <code>valueUsdt</code>/<code>conversionValue</code> заменить на <code>ecommerce.value</code> (или слать <code>valueUsdt</code> с клиента); в 291/338/429/434 подставить value и currency из <code>ecommerce</code>.</li><li>Тег Reddit <code>Purchase</code> перевесить на новое событие, либо удалить.</li><li><code>ThankYouPage</code> оставить как маркер экрана, но не как источник выручки.</li><li>Если серверная отправка есть — согласовать <code>transaction_id</code> между ней и клиентом (см. 03), иначе GA4 получит покупку дважды.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Есть ли серверная отправка покупок в GA4 (Measurement Protocol) или в Meta CAPI? Если да — с каким <code>transaction_id</code> и <code>value</code>, и как дедуплицируется с клиентским <code>ThankYouPage</code>.</li><li>Какая сумма считается выручкой: <code>priceUsdt</code> из каталога или <code>valueInUsd</code> из сокета (с учётом скидок)? Сейчас в разных системах разные (см. 03).</li></ul>"
+    }
+   },
+   "questions": [
+    "Есть ли серверная отправка покупок в GA4 (Measurement Protocol) или в Meta CAPI? Если да — с каким <code>transaction_id</code> и <code>value</code>, и как дедуплицируется с клиентским <code>ThankYouPage</code>.",
+    "Какая сумма считается выручкой: <code>priceUsdt</code> из каталога или <code>valueInUsd</code> из сокета (с учётом скидок)? Сейчас в разных системах разные (см. 03)."
+   ],
+   "notes_html": "<ul><li>Смысл q1 — контраст: у шагов checkout/payment колонки <code>dataLayer</code> и <code>ga4</code> заполнены, у purchase/token пусты при заполненных posthog/firebase. Подсветить пустые ячейки <code>dataLayer</code> и <code>ga4</code> только в строках <code>role = success</code>; никаких надписей. Ячейка с заполненным <code>dataLayer</code> и пустым <code>ga4</code> — push есть, GTM его не обрабатывает (<code>purchases</code>). Строка <code>purchases</code> (<code>role = view</code>) — показ истории покупок, не транзакция; в tooltip колонки <code>role</code>: «view — показ экрана/списка, success — факт действия».</li><li>В q2 при выборе <code>purchaseNft</code> видно, что <code>value</code>/<code>currency</code>/<code>transaction_id</code>/<code>items</code> есть в posthog/firebase и нет в dataLayer — группировать строки по <code>system_id</code>.</li><li>В q3 строки с <code>event_sends_it = 0</code> выделить фоном; в tooltip колонки <code>reads_variable</code> — «имя переменной dataLayer из контейнера, см. gtm_variable».</li><li>q4 — обычная detail-таблица.</li><li>Вопросы из раздела «Вопросы команде» показать под отчётом как чек-лист.</li></ul>",
+   "report": {
+    "id": "issue-01",
+    "title": "Покупка расходится между системами",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Стадии checkout → payment → purchase → token: какие системы получают каждый шаг",
+      "source": "v_journey",
+      "hint": "Одна строка — одна точка вызова из разметки критического пути; в колонках систем — имя события в этой системе, пусто = не отправляется. dataLayer — что код пушит (вход GTM), ga4 — что из этого контейнер реально отправляет в GA4. Сравните заполненность dataLayer и ga4 до покупки и на покупке",
+      "select": "single",
+      "sql": "SELECT stage, role, call_point_id, note, dataLayer, ga4, posthog, firebase_web, native_firebase, native_facebook, appsflyer, gleam\nFROM v_journey WHERE stage IN ('checkout','payment','purchase','token') ORDER BY stage_no, step_id",
+      "columns": {
+       "call_point_id": {
+        "render": "code",
+        "width": 280
+       },
+       "note": {
+        "render": "long"
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "Что именно уходит из выбранной точки вызова в каждую систему",
+      "source": "event + param",
+      "hint": "Одна строка — один параметр одного события в одной системе; value_expr — выражение из кода. Один и тот же объект в одних системах есть, в других нет",
+      "depends_on": "q1",
+      "sql": "SELECT e.system_id, e.event_name, p.name, p.value_expr, p.value_kind, p.value_literals, p.presence, p.added_by\nFROM event e LEFT JOIN param p USING(event_id)\nWHERE e.call_point_id = {{ q1.call_point_id | q }} AND e.kind = 'track'\nORDER BY e.system_id, p.param_id"
+     },
+     {
+      "id": "q3",
+      "title": "Теги GTM на ThankYouPage и purchase и что они читают из dataLayer",
+      "source": "v_gtm_contract",
+      "hint": "Одна строка — один параметр тега; reads_variable — переменная dataLayer, event_sends_it — несёт ли её событие-триггер",
+      "select": "single",
+      "sql": "SELECT source_event, tag_id, vendor, vendor_event, slot, param, reads_variable, event_sends_it\nFROM v_gtm_contract WHERE source_event IN ('ThankYouPage','purchase') AND paused = 0\nORDER BY source_event, tag_id, slot, param"
+     },
+     {
+      "id": "q4",
+      "title": "Выбранный тег целиком",
+      "source": "gtm_tag + gtm_route",
+      "hint": "Настройки тега из контейнера GTM-WQRPRMS и все условия его срабатывания",
+      "depends_on": "q3",
+      "sql": "SELECT g.tag_id, g.gtm_function, g.vendor, g.vendor_event, g.ids, g.consent_categories, g.paused, g.notes, r.condition\nFROM gtm_tag g JOIN gtm_route r USING(tag_id) WHERE g.tag_id = {{ q3.tag_id | q }}"
+     },
+     {
+      "id": "q5",
+      "title": "Откуда вызываются purchaseNft, upgradeNft, purchaseToken, thankYouPage и purchases",
+      "source": "v_event_site",
+      "hint": "Одна строка — одно место вызова; arg_expr — текст аргументов, в нём видны ключи payload",
+      "sql": "SELECT DISTINCT call_point_id, chunk_label, enclosing_method, trigger_kind, arg_expr\nFROM v_event_site WHERE call_point_id IN ('AnalyticsService.purchaseNft','AnalyticsService.upgradeNft',\n  'AnalyticsService.purchaseToken','AnalyticsService.thankYouPage','AnalyticsService.firstPurchaseNft',\n  'AnalyticsService.purchases')\nORDER BY call_point_id, call_site_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ],
+     [
+      "q5"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "02",
+   "slug": "purchase-client-only",
+   "file": "02-purchase-client-only.md",
+   "title": "Из клиента покупка уходит только по websocket и только в PostHog/Firebase/Facebook; серверной отправки из кода не видно",
+   "severity": 9,
+   "hours": 20,
+   "hours_detail": "бэкенд 10, фронт 4, аналитик 3, QA 3",
+   "stages": [
+    "purchase"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Событие покупки майнера (<code>purchaseNft</code>) вызывается из одного места — обработчика сокета <code>handleSocketNftBuy</code> в главном бандле. Оно срабатывает только если в момент прихода сообщения <code>onNftBuy</code> приложение открыто, купленные NFT уже есть в <code>getMyNfts()</code> и их тип — <code>miner</code>. Апгрейд (<code>upgradeNft</code>) — аналогично из <code>handleSocketNftUpgraded</code>. Покупка токена — из <code>track$</code> после ответа API. AppsFlyer, которому клиент шлёт 12 других событий через серверный endpoint, покупку не получает. Есть ли серверная отправка покупок в AppsFlyer/GA4/PostHog/Meta — из клиента не видно; это вопрос команде, и от ответа зависит, какие из последствий ниже реальны.</p>\n<aside class=\"review-note\">это нужно ясней сформулировать. \"Серверной отправки не видно\" это не проблема и точно не 9 баллов severity. Давай исходить из того что серверное событие есть. Здесь в другом проблема: ненадёжность клиентских событий PostHog/Firebase/Facebook. Это очень условная проблема, её severity нужно оценивать через сравнение серверных событий. Сократи это описание оставив только суть и вещи в которых мы уверены.</aside>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>call_site</code> для <code>AnalyticsService.purchaseNft</code>: 2 строки, обе <code>enclosing_method = handleSocketNftBuy</code>, <code>trigger_kind = method</code>, чанк — главный бандл.</li><li>В том же обработчике: <code>firstPurchaseNft()</code> (флаг <code>firstPurchase</code> в <code>localStorage</code> — на устройство, не на пользователя) и <code>thankYouPage({type:\"nft\", value:r})</code>.</li><li><code>system.appsflyer</code> — 12 событий (<code>v_coverage</code>): checkout-start, checkout-payment, complete-registration, login, onboarding-*, page-view, first-init, registration-start, user-reg-source. Покупок нет.</li><li><code>purchaseNft</code> фильтрует <code>type.name === \"miner\"</code>: покупки PFP-NFT не дают события покупки нигде.</li><li><code>system.gating</code>: firebase_web молчит в приложении; native_firebase — только при <code>analyticsSupported</code>; на Android мост отбрасывает <code>provider != firebase</code> (см. 14).</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<p>Если серверного канала нет (из клиента его не видно):</p>\n<ul><li>Покупки, завершившиеся, когда вкладка/приложение закрыты (редирект на карточного провайдера, задержка подтверждения, фон на мобильном), не попадают никуда. Размер потери неизвестен и не восстанавливается.</li><li>AppsFlyer не видит выручки → ROAS мобильных кампаний и постбэки партнёрам по покупкам невозможны.</li><li>«Первая покупка» считается на устройство: пользователь с двумя устройствами даёт два <code>first_purchase_nft</code>, а после очистки браузера — снова.</li><li>PFP-покупки отсутствуют в аналитике как класс.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Бэкенд: при подтверждении оплаты отправлять покупку server-to-server — AppsFlyer S2S (endpoint <code>/api/appsflyer/send-event</code> уже есть), GA4 Measurement Protocol, PostHog <code>capture</code> с <code>distinct_id = user.id</code>, Meta CAPI. Ключ дедупликации — id заказа (см. 03).</li><li>Клиентское событие оставить для контекста сессии, но помечать <code>source: \"client\"</code>; серверное — <code>source: \"server\"</code>.</li></ol>\n<aside class=\"review-note\">а с чего ты решил что мы итак не можем определить source? нахрена ты делаешь такие предложения без уверенности что это правдно нужно? Нельзя тут такое писать!</aside>\n<ol><li><code>firstPurchaseNft</code> считать по факту с бэкенда (<code>purchases_count == 1</code>), а не по <code>localStorage</code>.</li><li>Снять фильтр <code>miner</code> или отправлять отдельное событие для PFP.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Есть ли уже серверные постбэки в AppsFlyer/Meta, не видимые из клиента?</li><li>Какая доля оплат подтверждается с задержкой более сессии (крипто-переводы, банковские карты через редирект)?</li><li>Что нативная обёртка iOS делает с <code>provider: facebook</code> — на iOS мост передаёт все провайдеры, но нативный код iOS не анализировался.</li></ul>"
+    }
+   },
+   "questions": [
+    "Есть ли уже серверные постбэки в AppsFlyer/Meta, не видимые из клиента?",
+    "Какая доля оплат подтверждается с задержкой более сессии (крипто-переводы, банковские карты через редирект)?",
+    "Что нативная обёртка iOS делает с <code>provider: facebook</code> — на iOS мост передаёт все провайдеры, но нативный код iOS не анализировался."
+   ],
+   "notes_html": "<ul><li>В q1 колонка <code>enclosing_method</code>: значения <code>handleSocketNftBuy</code> / <code>handleSocketNftUpgraded</code> показать с иконкой «⚡ socket» (по точному совпадению строки, без другой логики).</li><li>q3 — статичный список без выбора; заголовок таблицы должен явно говорить «покупок в списке нет» только через tooltip, не текстом в таблице.</li><li>q4 колонка <code>gating</code> — <code>render: long</code>, это самый важный текст на странице.</li></ul>",
+   "report": {
+    "id": "issue-02",
+    "title": "Покупка только по websocket на клиенте",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Места вызова событий покупки",
+      "source": "v_event_site",
+      "hint": "Одна строка — одно место вызова точки; enclosing_method — метод компонента, из которого идёт вызов, trigger_kind — тип триггера",
+      "select": "single",
+      "sql": "SELECT DISTINCT call_point_id, chunk_label, chunk, enclosing_method, trigger_kind, arg_expr\nFROM v_event_site WHERE call_point_id IN ('AnalyticsService.purchaseNft','AnalyticsService.firstPurchaseNft',\n  'AnalyticsService.upgradeNft','AnalyticsService.purchaseToken','AnalyticsService.thankYouPage')\nORDER BY call_point_id, call_site_id"
+     },
+     {
+      "id": "q2",
+      "title": "События выбранной точки по системам и их условия",
+      "source": "event",
+      "hint": "Одна строка — отправка в одну систему; notes — условие из кода",
+      "depends_on": "q1",
+      "sql": "SELECT system_id, event_name, kind, notes FROM event\nWHERE call_point_id = {{ q1.call_point_id | q }} ORDER BY system_id"
+     },
+     {
+      "id": "q3",
+      "title": "Что получает AppsFlyer (все события)",
+      "source": "event (system_id = appsflyer)",
+      "hint": "Полный список событий, которые клиент отправляет через POST /api/appsflyer/send-event",
+      "sql": "SELECT event_name, call_point_id, notes FROM event WHERE system_id = 'appsflyer' ORDER BY event_name"
+     },
+     {
+      "id": "q4",
+      "title": "Когда системы молчат",
+      "source": "system",
+      "hint": "Условия из кода, при которых система не получает событий; consent_categories — какие согласия нужны тегам",
+      "sql": "SELECT system_id, title, transport, gating, consent_categories, in_apk FROM system\nWHERE system_id IN ('posthog','gtm_datalayer','firebase_web','native_firebase','native_facebook','appsflyer')"
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2",
+      "q3"
+     ],
+     [
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "03",
+   "slug": "transaction-id-and-value",
+   "file": "03-transaction-id-and-value.md",
+   "title": "transaction_id — случайный UUID; сумма покупки считается по-разному в разных системах",
+   "severity": 8,
+   "hours": 8,
+   "hours_detail": "бэкенд 3, фронт 2, аналитик 1, QA 2",
+   "stages": [
+    "purchase",
+    "token"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Во всех событиях покупки <code>transaction_id = crypto.randomUUID()</code> в момент вызова. Id заказа с бэкенда не используется. <code>value</code> для <code>purchase</code> — сумма <code>priceUsdt</code> купленных NFT из каталога; <code>value</code> для <code>ThankYouPage</code> в той же точке — <code>valueInUsd</code> из сокета; для апгрейда — <code>gmtValue × tokenPrice</code>, посчитанный на клиенте по текущему курсу; для токена — <code>amountInAsset × rate</code>.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>param</code> для <code>purchaseNft</code>/<code>upgradeNft</code>/<code>purchaseToken</code>: <code>transaction_id</code>, <code>value_kind = uuid</code>, <code>value_expr = fe()</code> во всех системах (posthog, firebase_web, native_firebase).</li><li><code>purchaseNft</code>: <code>value = e.reduce((a,l)=&gt;a+l.priceUsdt,0)</code> — каталожная цена; <code>ThankYouPage.value = r</code> — <code>valueInUsd</code> из сообщения сокета.</li><li><code>upgradeNft</code>: <code>value = e.priceUsdt</code>; <code>ThankYouPage.value = i</code> — <code>gmtValue * tokenPrice</code> (см. <code>call_site.arg_expr</code>).</li><li>Facebook <code>Purchase</code>: <code>id = contentIdByMinerPower[power] || a.id</code> — id контента по мощности, не заказ.</li><li><code>currency</code> везде литерал <code>\"USD\"</code>, хотя оплата может быть в GMT/BTC/USDT (<code>buy_token.currency = e.currency</code>).</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Дедупликация невозможна: повторная доставка сокет-сообщения или две вкладки дают две «покупки» с разными id.</li><li>Сверка выручки аналитики с бэкендом невозможна — нечем джойнить.</li><li>Скидки, промокоды и рассрочка не отражены в <code>value</code> (каталожная цена), а <code>ThankYouPage</code> даёт другую сумму → GA4 и PostHog расходятся с финансами и между собой.</li><li>Для апгрейда сумма зависит от курса в момент события на клиенте.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Бэкенд: в сообщение сокета <code>onNftBuy</code>/<code>onNftUpgraded</code> и в ответ <code>payment</code> добавить <code>orderId</code>, <code>paidAmountUsd</code>, <code>paidCurrency</code>, <code>discountUsd</code>.</li><li>Клиент: <code>transaction_id = orderId</code>, <code>value = paidAmountUsd</code>, <code>currency = paidCurrency</code> во всех системах и в <code>ThankYouPage</code>.</li><li>Оставить каталожную цену отдельным полем <code>list_price_usd</code> в <code>items</code>.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Есть ли <code>orderId</code> в сообщении сокета сейчас (в коде используется только <code>nftId(s)</code> и <code>valueInUsd</code>)?</li><li>Какую сумму считать выручкой для рекламных систем: оплаченную или каталожную?</li></ul>"
+    }
+   },
+   "questions": [
+    "Есть ли <code>orderId</code> в сообщении сокета сейчас (в коде используется только <code>nftId(s)</code> и <code>valueInUsd</code>)?",
+    "Какую сумму считать выручкой для рекламных систем: оплаченную или каталожную?"
+   ],
+   "notes_html": "<ul><li>В q1 значение <code>uuid</code> в колонке <code>value_kind</code> — красный бейдж; <code>const</code> — серый; <code>computed</code>/<code>from_argument</code> — обычный текст.</li><li>Группировка строк q1 по <code>call_point_id</code> (ag-grid row grouping, раскрыто по умолчанию).</li><li>q3 — колонка <code>arg_expr</code> шириной не менее 40% таблицы.</li></ul>",
+   "report": {
+    "id": "issue-03",
+    "title": "transaction_id и value в событиях покупки",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Поля суммы и идентификатора во всех событиях покупки",
+      "source": "journey_step + event + param",
+      "hint": "Одна строка — одно поле одного события в одной системе; value_kind = uuid означает crypto.randomUUID()",
+      "select": "single",
+      "sql": "SELECT j.stage, e.call_point_id, e.system_id, e.event_name, p.name, p.value_expr, p.value_kind, p.value_literals\nFROM journey_step j JOIN event e USING(call_point_id) JOIN param p USING(event_id)\nWHERE j.stage IN ('purchase','token') AND e.kind = 'track'\n  AND p.name IN ('value','transaction_id','currency','items','_valueToSum','cost','id','eventValue','ecommerce','type')\nORDER BY e.call_point_id, e.system_id, p.name",
+      "columns": {
+       "value_expr": {
+        "render": "expr"
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "Все параметры выбранного события",
+      "source": "param",
+      "hint": "Полный payload события, включая транспортные поля (added_by = transport)",
+      "depends_on": "q1",
+      "sql": "SELECT p.name, p.value_expr, p.value_kind, p.value_literals, p.presence, p.pii_class, p.added_by\nFROM param p JOIN event e USING(event_id)\nWHERE e.call_point_id = {{ q1.call_point_id | q }} AND e.system_id = {{ q1.system_id | q }} AND e.event_name = {{ q1.event_name | q }}\nORDER BY p.param_id"
+     },
+     {
+      "id": "q3",
+      "title": "Откуда берётся value в ThankYouPage (аргументы вызова)",
+      "source": "call_site",
+      "hint": "arg_expr — буквальный текст аргументов в месте вызова",
+      "sql": "SELECT call_point_id, chunk, enclosing_method, trigger_kind, arg_expr FROM call_site\nWHERE call_point_id IN ('AnalyticsService.thankYouPage','AnalyticsService.purchaseNft','AnalyticsService.upgradeNft','AnalyticsService.purchaseToken')\nORDER BY call_point_id, call_site_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2",
+      "q3"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "04",
+   "slug": "checkout-flows-merged",
+   "file": "04-checkout-flows-merged.md",
+   "title": "Шаги чекаута общие для двух разных потоков и не несут контекста товара",
+   "severity": 7,
+   "hours": 8,
+   "hours_detail": "фронт 4, GTM 2, QA 2",
+   "stages": [
+    "checkout",
+    "payment"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Поток «создать майнер» (paywall, <code>miner-create-modal</code>) и поток «корзина NFT / IAP» (<code>nft-iap-button</code>, корневой сервис корзины) используют пары точек вызова, которые отправляют <strong>одинаковые имена</strong> во все системы: <code>checkout</code>, <code>chooseMethod</code>/<code>changeMethod</code>, <code>CheckoutPaymentMethod</code>, <code>paymentProceed</code> (dataLayer) и <code>checkout-start</code>, <code>choose_method</code>, <code>checkout-payment</code>, <code>purchase_try_nft</code> (PostHog, Firebase). Payload этих событий в dataLayer — только <code>cid</code>; в PostHog — пустой. Ни продукта, ни суммы, ни списка NFT.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>double_dispatch</code>, стадии checkout и payment: 25 строк — каждое имя отправляется из двух точек вызова во всех системах.</li><li><code>param</code> для <code>checkout</code>, <code>CheckoutPaymentMethod</code>, <code>paymentProceed</code> в dataLayer: одна строка — <code>cid</code> (<code>added_by = transport</code>). В PostHog <code>checkout-start</code>, <code>checkout-payment</code>, <code>purchase_try_nft</code> — 0 параметров.</li><li>GA4-тег <code>payment_proceed</code> (180) читает <code>method</code> — событие <code>paymentProceed</code> его не несёт (<code>v_gtm_contract</code>); GA4 <code>purchase_try_nft</code> (452) читает <code>power/efficiency/cost/user_id</code> и висит на имени, которого в dataLayer нет.</li><li><code>checkout</code> в корзине срабатывает только при <code>nftBagStore.type$ === \"miner\"</code> и один раз на жизнь компонента (флаги <code>isAnalyticCheckoutStartChanged</code>); в paywall — тоже один раз, но без проверки типа.</li><li>Метод оплаты (<code>method</code>) приходит минифицированным аргументом (<code>e</code>, <code>n</code>, <code>t</code>, <code>i</code>); единственный литерал — <code>\"nft-iap\"</code>.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Воронки «paywall → оплата» и «корзина → оплата» неразличимы; конверсия по каждому потоку неизвестна.</li><li>Нет <code>value</code>/<code>items</code> на <code>begin_checkout</code>: невозможно посчитать конверсию по цене/мощности майнера, средний чек на входе в оплату, брошенные корзины в деньгах.</li><li>GA4 <code>payment_proceed</code> без <code>method</code> → эффективность провайдеров оплаты по GA4 не считается.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>В обе группы точек передавать <code>flow</code> (<code>create_miner | nft_bag | miner_wars | iap</code>), <code>value</code>, <code>currency</code>, <code>items</code> (уже есть в <code>nftBagStore</code>/<code>nftPaymentStore</code>).</li><li>Либо перевести чекаут на новую таксономию (<code>app_nft_buy_checkout_open</code> …) с <code>product</code>, <code>funnel_name</code>, <code>cta_name</code> — по аналогии с <code>NftPaywallFunnelAnalyticsService</code>.</li><li>В <code>paymentProceed*</code> передавать <code>method</code> явно (сейчас GTM подхватывает старое значение из data model, если оно было).</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Какие значения принимает <code>method</code> в <code>analyticsSelectPayment(e)</code>: ключи провайдера (<code>binance</code>, <code>card</code>, <code>alchemy</code>, …) или человекочитаемые названия?</li><li>Нужен ли отдельный учёт Miner Wars оплат (там тот же <code>paymentProceedCreateMiner</code>)?</li></ul>"
+    }
+   },
+   "questions": [
+    "Какие значения принимает <code>method</code> в <code>analyticsSelectPayment(e)</code>: ключи провайдера (<code>binance</code>, <code>card</code>, <code>alchemy</code>, …) или человекочитаемые названия?",
+    "Нужен ли отдельный учёт Miner Wars оплат (там тот же <code>paymentProceedCreateMiner</code>)?"
+   ],
+   "notes_html": "<ul><li>q1 группировать по <code>stage</code>; колонка <code>points</code> — чипы.</li><li>В q2 при пустом <code>name</code> показывать одну строку «(нет параметров)» серым — это единственная допустимая «надпись», и она должна быть именно так сформулирована.</li><li>q3 колонка <code>arg_expr</code>: литералы в кавычках (например <code>\"nft-iap\"</code>) выделить полужирным — это единственное известное значение <code>method</code>.</li></ul>",
+   "report": {
+    "id": "issue-04",
+    "title": "Шаги чекаута общие для двух потоков",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Имена стадий checkout/payment, отправляемые из нескольких точек вызова",
+      "source": "journey_step + event",
+      "hint": "Одна строка — одно имя в одной системе; points — точки вызова, которые его отправляют",
+      "select": "single",
+      "sql": "SELECT j.stage, e.system_id, e.event_name, GROUP_CONCAT(DISTINCT e.call_point_id) AS points\nFROM journey_step j JOIN event e USING(call_point_id)\nWHERE j.stage IN ('checkout','payment') AND e.kind = 'track'\nGROUP BY j.stage, e.system_id, e.event_name HAVING COUNT(DISTINCT e.call_point_id) > 1\nORDER BY j.stage, e.system_id, e.event_name",
+      "columns": {
+       "points": {
+        "render": "names"
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "Payload выбранного имени в каждой точке вызова",
+      "source": "event + param",
+      "hint": "Одна строка — один параметр; если у события нет параметров, строка одна с пустым name",
+      "depends_on": "q1",
+      "sql": "SELECT e.call_point_id, p.name, p.value_expr, p.value_kind, p.added_by\nFROM event e LEFT JOIN param p USING(event_id)\nWHERE e.system_id = {{ q1.system_id | q }} AND e.event_name = {{ q1.event_name | q }}\nORDER BY e.call_point_id, p.param_id"
+     },
+     {
+      "id": "q3",
+      "title": "Откуда вызываются шаги чекаута",
+      "source": "v_event_site",
+      "hint": "chunk_label — читаемое имя файла сборки (компоненты); arg_expr — аргументы вызова, здесь виден method",
+      "sql": "SELECT DISTINCT call_point_id, chunk_label, enclosing_method, trigger_kind, arg_expr\nFROM v_event_site WHERE call_point_id IN (SELECT call_point_id FROM journey_step WHERE stage IN ('checkout','payment'))\nORDER BY call_point_id, call_site_id"
+     },
+     {
+      "id": "q4",
+      "title": "Теги GTM на именах чекаута и что они читают",
+      "source": "v_gtm_contract",
+      "hint": "event_sends_it = 0 — тег читает поле, которого событие не несёт",
+      "sql": "SELECT source_event, tag_id, vendor, vendor_event, slot, param, reads_variable, event_sends_it\nFROM v_gtm_contract WHERE source_event IN ('checkout','chooseMethod','changeMethod','CheckoutPaymentMethod','paymentProceed','purchase_try_nft') AND paused = 0\nORDER BY source_event, tag_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "05",
+   "slug": "signup-login-no-method",
+   "file": "05-signup-login-no-method.md",
+   "title": "Регистрация и логин не несут способ входа и user_id; теги GTM читают поля, которых в событии нет",
+   "severity": 7,
+   "hours": 6,
+   "hours_detail": "фронт 3, GTM 1, QA 2",
+   "stages": [
+    "signup",
+    "login"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p><code>register()</code> и <code>login()</code> вызываются без аргументов из четырёх разных потоков: форма email, социальный провайдер (<code>signInWithProvider</code>), крипто-кошелёк, обмен токена (<code>exchangePnpTransferToken</code>). Событие не знает, каким способом пользователь зарегистрировался. В <code>dataLayer</code> <code>signup</code>/<code>login</code> несут только константы (<code>eventCategory</code>, <code>eventLabel</code>, <code>pageType</code>), статусы KYC и <code>cid</code> — без <code>user_id</code>. При этом GA4-теги <code>registration</code>/<code>registration_finish</code> читают <code>user_id</code>, TikTok <code>CompleteRegistration</code> — <code>userId</code> для <code>sha256_external_id</code>.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>call_point.signature</code> для <code>register</code> и <code>login</code> — <code>()</code>. <code>call_site</code>: 7 мест для <code>register</code> (чанки регистрации, auth-провайдеров, <code>token</code>, главный бандл), 7 для <code>login</code>.</li><li>Единственное событие с методом — <code>site_auth_signup_method_select</code> из <code>registerEmail</code>: <code>method = \"password\"</code>, <code>method_provider = \"email\"</code> (константы, только email-путь).</li><li><code>param</code> для dataLayer <code>signup</code>: <code>eventCategory</code>, <code>eventAction</code>, <code>pageType</code>, <code>eventLabel</code>, <code>verificationStatusLevel1/2</code>, <code>cid</code>. <code>user_id</code>/<code>userId</code> отсутствуют.</li><li><code>v_gtm_contract</code>, <code>signup</code>: GA4 137 и 182 читают <code>user_id</code> (<code>event_sends_it = 0</code>); TikTok 264 и Custom HTML 466 (X Ads) читают <code>userId</code> (0).</li><li><code>registerError</code>/<code>loginError</code> несут текст ошибки (<code>error = e</code>, <code>pii_class = free_text</code>), но не метод.</li><li><code>startReg</code> несёт <code>formLocation</code> (<code>buy-miner | trial | buy-token | login | home | cart | header</code> — из <code>call_site.arg_expr</code>) — это единственное место, где есть источник входа в регистрацию.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Нельзя сравнить конверсию и качество пользователей по способу регистрации (email / Google / Apple / кошелёк) ни в одной системе.</li><li>GA4 <code>registration</code> без <code>user_id</code> у нового пользователя: не связывается с последующими событиями по User-ID; TikTok получает пустой <code>external_id</code> → низкий match rate.</li><li>Ошибки регистрации нельзя разложить по способу входа.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li><code>register(method, provider)</code>, <code>login(method, provider)</code>, <code>registerError(method, error)</code>, <code>loginError(method, error)</code>; значения — фиксированный словарь (<code>password | google | apple | wallet | token</code>).</li><li>Добавить <code>user_id</code> в <code>signup</code> и <code>login</code> push (пользователь уже есть в <code>this.user</code> — см. <code>verificationStatusLevel*</code>).</li><li>Прокинуть <code>formLocation</code> из <code>startReg</code> в <code>signup</code> (сохранить в сервисе между вызовами).</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Есть ли backend-событие регистрации с методом (например, в Customer.io через серверный SDK)?</li><li><code>x_sign_up</code> с хешами email/телефона — согласован ли с политикой приватности (см. также 07)?</li></ul>"
+    }
+   },
+   "questions": [
+    "Есть ли backend-событие регистрации с методом (например, в Customer.io через серверный SDK)?",
+    "<code>x_sign_up</code> с хешами email/телефона — согласован ли с политикой приватности (см. также 07)?"
+   ],
+   "notes_html": "<ul><li>q1: строки <code>role = success</code> показать первыми внутри стадии (сортировка по <code>stage_no</code>, затем <code>role</code> в порядке success, action, view, error).</li><li>q3: если <code>arg_expr</code> пуст во всех строках — фон колонки серый (визуальный сигнал «аргументов нет»), без текста.</li><li>q4: фильтр по умолчанию <code>event_sends_it = 0</code> включён и виден пользователю как чип, который можно снять.</li></ul>",
+   "report": {
+    "id": "issue-05",
+    "title": "Регистрация и логин без метода и user_id",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "События стадий signup и login по системам",
+      "source": "v_journey",
+      "hint": "Одна строка — точка вызова; в колонках — имена событий в системах",
+      "select": "single",
+      "sql": "SELECT stage, role, call_point_id, note, dataLayer, posthog, firebase_web, native_firebase, native_facebook, appsflyer, customerio\nFROM v_journey WHERE stage IN ('signup','login') ORDER BY stage_no, step_id"
+     },
+     {
+      "id": "q2",
+      "title": "Параметры выбранной точки во всех системах",
+      "source": "event + param",
+      "hint": "Ищите здесь method/provider/user_id — их нет",
+      "depends_on": "q1",
+      "sql": "SELECT e.system_id, e.event_name, p.name, p.value_expr, p.value_kind, p.value_literals, p.pii_class, p.added_by\nFROM event e LEFT JOIN param p USING(event_id)\nWHERE e.call_point_id = {{ q1.call_point_id | q }} AND e.kind = 'track' ORDER BY e.system_id, p.param_id"
+     },
+     {
+      "id": "q3",
+      "title": "Откуда вызывается выбранная точка",
+      "source": "call_site + chunk",
+      "hint": "Разные чанки = разные способы входа; arg_expr пустой = метод не передаётся",
+      "depends_on": "q1",
+      "sql": "SELECT cs.chunk, ch.label AS chunk_label, cs.enclosing_method, cs.trigger_kind, cs.arg_expr\nFROM call_site cs LEFT JOIN chunk ch ON ch.chunk = cs.chunk\nWHERE cs.call_point_id = {{ q1.call_point_id | q }} ORDER BY cs.call_site_id"
+     },
+     {
+      "id": "q4",
+      "title": "Теги GTM на signup/startReg/login и что они читают",
+      "source": "v_gtm_contract",
+      "hint": "event_sends_it = 0 — тег читает переменную dataLayer, которой нет в событии",
+      "sql": "SELECT source_event, tag_id, vendor, vendor_event, slot, param, reads_variable, event_sends_it\nFROM v_gtm_contract WHERE source_event IN ('signup','startReg','login','register_email','signup_error','login_error') AND paused = 0\nORDER BY source_event, tag_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2",
+      "q3"
+     ],
+     [
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "06",
+   "slug": "consent-default-denied",
+   "file": "06-consent-default-denied.md",
+   "title": "Consent Mode: всё запрещено по умолчанию для всех, а PostHog, Customer.io и Gleam согласия не проверяют",
+   "severity": 7,
+   "hours": 8,
+   "hours_detail": "фронт 3, GTM 2, аналитик 1, QA 2",
+   "stages": [
+    "все"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p><code>ConsentService</code> при старте вызывает <code>gtag(\"consent\",\"default\", …)</code> с <code>denied</code> для всех категорий, кроме <code>security_storage</code>, и показывает баннер каждому пользователю без cookie <code>consentMode</code> — без разделения по регионам. Все теги GA4 требуют <code>analytics_storage</code>, рекламные — <code>ad_storage</code>/<code>ad_user_data</code>/<code>ad_personalization</code>. При этом <code>loadCustomer()</code> и <code>loadGleamScript()</code> вызываются <strong>до</strong> <code>consentService.init()</code>, а <code>loadPostHog()</code> — после, но состояние согласия не проверяет. На iOS-обёртке согласие запрашивается у нативного слоя с таймаутом 120 с; по таймауту — <code>denied</code>.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>consent_mode</code>: 6 настроек <code>default_value = denied</code>, <code>security_storage = granted</code>.</li><li><code>system.gating</code> для <code>gtm_datalayer</code>, <code>posthog</code>, <code>customerio</code>, <code>gleam</code> — порядок относительно <code>consentService.init()</code> записан текстом.</li><li><code>gtm_tag</code>: у 64 тегов GA4 <code>consent_categories = analytics_storage</code>; у рекламных — <code>ad_storage, ad_user_data, ad_personalization</code>; у PostHog/Customer.io/AppsFlyer/Sentry <code>system.consent_categories</code> пусто.</li><li><code>app-bottom-sheet-consent</code> — компонент главного бандла (<code>chunk.components</code>).</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>До клика по баннеру GA4 работает в cookieless-режиме (пинги без cookie, моделирование), пиксели молчат; PostHog и Customer.io видят всех. Любое сравнение «GA4 против PostHog» систематически расходится на долю не согласившихся, и эта доля неизвестна.</li><li>Пользователи, закрывшие приложение до ответа на баннер (или iOS с таймаутом), навсегда «denied» для рекламных систем, хотя их путь в PostHog есть.</li><li>Для юрисдикций без требования opt-in теряются данные без необходимости.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Регион-зависимые дефолты: <code>granted</code> вне ЕЭЗ/UK/Швейцарии, <code>denied</code> внутри (страна уже есть в <code>countryCodeStore</code>).</li><li>Единая политика: либо гейтить PostHog/Customer.io/Gleam тем же согласием (<code>analytics_storage</code>), либо явно зафиксировать, что они работают на законном интересе, и учитывать это в отчётах.</li><li>Передавать факт согласия в PostHog как person property (<code>consent_analytics</code>, <code>consent_ads</code>), чтобы расхождение систем стало измеримым.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Какая доля пользователей нажимает «принять всё»? (Сейчас это неизвестно ни одной системе — событий по баннеру нет.)</li><li>Есть ли требование показывать баннер вне ЕС?</li></ul>"
+    }
+   },
+   "questions": [
+    "Какая доля пользователей нажимает «принять всё»? (Сейчас это неизвестно ни одной системе — событий по баннеру нет.)",
+    "Есть ли требование показывать баннер вне ЕС?"
+   ],
+   "notes_html": "<ul><li>q1: значение <code>denied</code> — красный бейдж, <code>granted</code> — зелёный. Это единственная цветовая кодировка на странице.</li><li>q2: в <code>gating</code> подстрокам «до consentService.init()» и «не проверяет» задать подсветку (точное совпадение подстроки, без другой логики).</li><li>q3 → q4 — обычный master-detail.</li></ul>",
+   "report": {
+    "id": "issue-06",
+    "title": "Consent Mode и гейтинг систем",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Дефолты Consent Mode",
+      "source": "consent_mode",
+      "hint": "Значения gtag(consent, default) при старте и наборы «только необходимые» / «всё разрешено»; form_field — поле формы баннера",
+      "sql": "SELECT setting, default_value, necessary_value, all_granted_value, form_field FROM consent_mode"
+     },
+     {
+      "id": "q2",
+      "title": "Когда и при каких условиях каждая система получает данные",
+      "source": "system",
+      "hint": "gating — условия из кода, включая порядок загрузки относительно consentService.init(); consent_categories — какие согласия нужны тегам системы",
+      "sql": "SELECT system_id, title, kind, gating, consent_categories FROM system\nWHERE system_id IN ('gtm_datalayer','posthog','customerio','gleam','hotjar','appsflyer','firebase_web','native_firebase','sentry')\nORDER BY system_id",
+      "columns": {
+       "gating": {
+        "render": "long",
+        "width": 520
+       }
+      }
+     },
+     {
+      "id": "q3",
+      "title": "Теги GTM по требуемым согласиям",
+      "source": "gtm_tag",
+      "hint": "Одна строка — вендор × набор категорий согласия; tags — число активных тегов",
+      "select": "single",
+      "sql": "SELECT COALESCE(consent_categories, '(без требований)') AS consent_categories, vendor, COUNT(*) AS tags\nFROM gtm_tag WHERE paused = 0 GROUP BY 1, 2 ORDER BY 1, 3 DESC"
+     },
+     {
+      "id": "q4",
+      "title": "Теги выбранной группы и их триггеры",
+      "source": "gtm_tag + gtm_route",
+      "hint": "Одна строка — тег × условие срабатывания",
+      "depends_on": "q3",
+      "sql": "SELECT g.tag_id, g.vendor, g.vendor_event, r.source_event, r.condition\nFROM gtm_tag g JOIN gtm_route r USING(tag_id)\nWHERE g.paused = 0 AND g.vendor = {{ q3.vendor | q }} AND COALESCE(g.consent_categories, '(без требований)') = {{ q3.consent_categories | q }}\nORDER BY g.tag_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q3"
+     ],
+     [
+      "q2"
+     ],
+     [
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "07",
+   "slug": "identity-fragmentation",
+   "file": "07-identity-fragmentation.md",
+   "title": "Идентичность пользователя: четыре имени, два типа, нативный PostHog без identify, email и телефон в нативный мост открытым текстом",
+   "severity": 6,
+   "hours": 8,
+   "hours_detail": "фронт 3, Android 2, бэкенд 1, QA 2",
+   "stages": [
+    "identify"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Id пользователя уходит под именами <code>user_id</code>, <code>userId</code>, <code>distinct_id</code>, <code>client_id</code> и в двух типах: число (<code>this.user.id</code>) и строка (<code>String(e.id)</code>). PostHog в вебе получает <code>identify(String(id))</code>, а PostHog Android SDK в APK только инициализируется — вызова <code>identify</code> в декомпилированном коде нет, поэтому нативные <code>Application Opened</code>/<code>$screen</code> живут под анонимным device-id. AppsFlyer получает <code>appsflyerId</code>, но не id пользователя (по крайней мере с клиента). <code>AuthStore.authForAppAnalytics</code> отправляет в нативную обёртку <code>{userId, email, phone}</code> без хеширования.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>user_id_spellings</code>: <code>user_id</code> (this.user.id / this.user?.id / String(e.id) / this.userId — 4 выражения), <code>userId</code> (e / e.id / this.user?.id), <code>distinct_id</code>, <code>client_id</code>.</li><li><code>identity_calls</code>: posthog <code>(identify)</code> + <code>site_user_identified</code> (только при смене distinct_id), customerio <code>(identify)</code>, hotjar <code>(identify)</code> ×2, native_firebase <code>ANALYTICS_USER_ID</code> (в service worker), native_auth_bridge <code>(auth-for-analytics)</code>.</li><li><code>call_point</code> <code>io.gmt.app.twa.Application.g()</code>: <code>PostHogAndroid.setup(...)</code> — «конфиг по умолчанию, флаги автозахвата не переопределяются»; событий кроме автозахвата у <code>posthog_android</code> нет.</li><li><code>param</code> AppsFlyer: конверт из 14 транспортных полей, среди них нет <code>customer_user_id</code>/<code>user_id</code>.</li><li><code>plain_pii</code>: <code>email = e.email</code>, <code>phone = e.phone</code> в <code>(auth-for-analytics)</code>.</li><li>GTM: <code>user_id</code> (переменная 8) читают теги 137, 158, 182, 291, 449, 452; <code>userId</code> (16) — 24 тега, включая TikTok <code>sha256_external_id</code> и Impact <code>customerid</code>. В GA4 config-теге (113) <code>user_id</code> не задан — только свойство пользователя <code>platform</code>.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>В PostHog у пользователя приложения две «персоны»: анонимная нативная (installs/opens/screens) и веб-идентифицированная; склейка невозможна.</li><li>Свойство <code>user_id</code> в PostHog имеет смешанный тип (число/строка) — фильтры и когорты по нему ненадёжны.</li><li>В GA4 User-ID присутствует только на тех событиях, где тег явно мапит <code>userId</code>/<code>user_id</code>; на событиях чекаута его нет.</li><li>AppsFlyer-инсталлы не связываются с пользователями без серверного <code>customer_user_id</code>.</li><li>Плоский email/телефон в нативном слое — риск приватности вне аналитического контура.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Единое поле <code>user_id</code> (строка) во всех системах; убрать <code>userId</code>; <code>site_user_identified</code> — оставить.</li><li>Через мост вызывать <code>PostHog.identify(user_id)</code> в нативном слое при <code>auth-for-analytics</code>; там же <code>AppsFlyerLib.setCustomerUserId</code>.</li><li>В GA4 config-теге задать <code>user_id</code> из переменной <code>userId</code> (после унификации — <code>user_id</code>).</li><li><code>auth-for-analytics</code>: передавать только <code>userId</code> или хеши.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Что нативный код iOS/Android делает с <code>email</code>/<code>phone</code> из <code>auth-for-analytics</code>? В извлечённом дампе Android тело обработчика отсутствует.</li><li>Ставит ли бэкенд <code>customer_user_id</code> в AppsFlyer S2S?</li></ul>"
+    }
+   },
+   "questions": [
+    "Что нативный код iOS/Android делает с <code>email</code>/<code>phone</code> из <code>auth-for-analytics</code>? В извлечённом дампе Android тело обработчика отсутствует.",
+    "Ставит ли бэкенд <code>customer_user_id</code> в AppsFlyer S2S?"
+   ],
+   "notes_html": "<ul><li>q1: значения <code>String(...)</code> в <code>value_expr</code> пометить чипом «string», остальные — «number?» (по подстроке <code>String(</code>; это визуальная подсказка, а не вывод).</li><li>q5: колонка <code>pii_class</code> — красный бейдж по словарю <code>render: pii</code>.</li><li>q6: одна строка; показать как карточку, а не таблицу.</li></ul>",
+   "report": {
+    "id": "issue-07",
+    "title": "Идентичность пользователя",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Под какими именами и выражениями уходит id пользователя",
+      "source": "param",
+      "hint": "Одна строка — имя параметра × выражение; systems — куда уходит",
+      "select": "single",
+      "sql": "SELECT p.name, p.value_expr, COUNT(*) AS occurrences, GROUP_CONCAT(DISTINCT e.system_id) AS systems\nFROM param p JOIN event e USING(event_id)\nWHERE p.name IN ('user_id','userId','distinct_id','client_id','customer_id') GROUP BY 1, 2 ORDER BY 1, 3 DESC",
+      "columns": {
+       "systems": {
+        "render": "names"
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "События с выбранным написанием",
+      "source": "event + param",
+      "hint": "Все события, где параметр с таким именем и выражением присутствует",
+      "depends_on": "q1",
+      "sql": "SELECT e.system_id, e.event_name, e.call_point_id, p.presence, p.added_by\nFROM param p JOIN event e USING(event_id)\nWHERE p.name = {{ q1.name | q }} AND p.value_expr = {{ q1.value_expr | q }} ORDER BY e.system_id, e.event_name"
+     },
+     {
+      "id": "q3",
+      "title": "Вызовы identify / reset / person properties",
+      "source": "event (kind ≠ track)",
+      "hint": "Одна строка — управляющий вызов в одной системе; payload — что передаётся",
+      "sql": "SELECT e.system_id, e.kind, e.event_name, e.call_point_id, GROUP_CONCAT(p.name || '=' || p.value_expr, ' | ') AS payload, e.notes\nFROM event e LEFT JOIN param p USING(event_id) WHERE e.kind IN ('identify','reset','person_properties')\nGROUP BY e.event_id ORDER BY e.system_id"
+     },
+     {
+      "id": "q4",
+      "title": "Теги GTM, которые читают user_id или userId",
+      "source": "gtm_tag_param + gtm_variable",
+      "hint": "Одна строка — тег × параметр; slot показывает, куда тег кладёт значение",
+      "sql": "SELECT g.tag_id, g.vendor, g.vendor_event, tp.slot, tp.param, v.name AS reads_variable\nFROM gtm_tag_param tp JOIN gtm_variable v ON v.var_id = tp.var_id JOIN gtm_tag g ON g.tag_id = tp.tag_id\nWHERE v.name IN ('user_id','userId') AND g.paused = 0 ORDER BY v.name, g.tag_id"
+     },
+     {
+      "id": "q5",
+      "title": "Персональные данные открытым текстом",
+      "source": "param (pii_class = plain_pii)",
+      "hint": "Поля, где email или телефон уходят без хеширования",
+      "sql": "SELECT e.system_id, e.event_name, e.call_point_id, p.name, p.value_expr, p.pii_class\nFROM param p JOIN event e USING(event_id) WHERE p.pii_class = 'plain_pii'"
+     },
+     {
+      "id": "q6",
+      "title": "Нативный PostHog в APK",
+      "source": "call_point + event",
+      "hint": "Что делает Android-обёртка с PostHog SDK; событий кроме автозахвата нет",
+      "sql": "SELECT cp.call_point_id, cp.source_chunk, cp.notes, GROUP_CONCAT(e.event_name, ', ') AS auto_events\nFROM call_point cp LEFT JOIN event e USING(call_point_id) WHERE cp.layer = 'native_sdk_init' GROUP BY cp.call_point_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3"
+     ],
+     [
+      "q4",
+      "q5"
+     ],
+     [
+      "q6"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "08",
+   "slug": "experiments-not-exposed",
+   "file": "08-experiments-not-exposed.md",
+   "title": "Эксперименты и раскатки не видны в аналитике: ни одно событие не несёт группу или бакет",
+   "severity": 7,
+   "hours": 6,
+   "hours_detail": "фронт 3, аналитик 1, QA 2",
+   "stages": [
+    "все"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>В сборке есть A/B-конфиги, зависящие от <code>user.randomNumber</code> (<code>notificationsV2</code> — реальный сплит на группы B/C, <code>installmentProposal</code> — бакеты 0–49, <code>roiForMinerCreateOptions</code>), бэкенд-эксперименты через <code>POST {abExperimentsHost}/config/ab-tests/get-user-info</code> (30 ключей) и профильная группа <code>testingGroup</code> (A/B → тип бонуса при регистрации). Ни одно событие ни в одной системе не передаёт ни <code>randomNumber</code>, ни <code>testingGroup</code>, ни значение флага. Персон-свойства PostHog выставляются только для <code>mining_mode</code> и <code>mw_first_seen_at</code>.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>experiment_exposure</code> — 0 строк.</li><li><code>feature_flag</code>: <code>ab_config</code> 15, <code>ab_context_key</code> 30, <code>ab_flag_usage</code> 15, <code>geo_config</code> 9, <code>targeting_list</code> 17, <code>user_bucket</code> 2 (плюс <code>env_boolean</code> 31, <code>env_var</code> 11).</li><li><code>flags_partial_rollout</code>: <code>notificationsV2</code> = <code>randomNumber ≥10 → \"B\"; ≥40 → \"B\"; ≥70 → \"C\"</code>; <code>installmentProposal</code> = <code>0–49 → true</code>; <code>newPaymentFlow</code>, <code>nftInstallment</code>, <code>bonusMinerV3FF</code> — аллоу-листы пользователей.</li><li><code>feature_flag.randomNumber.notes</code>: «уходит в AppsFlyer как af_sub2; в дев-консоли есть поле для подмены».</li><li><code>(person_properties)</code> в PostHog: наблюдаемые вызовы — <code>{mining_mode}</code> и <code>{mw_first_seen_at}</code>.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Эффект экспериментов на регистрацию/покупку нельзя измерить в PostHog или GA4: группу приходится восстанавливать офлайн по <code>randomNumber</code> из бэкенда, что не работает для незалогиненных и для бэкенд-ключей.</li><li>Пользователи из аллоу-листов (<code>newPaymentFlow</code>, <code>nftInstallment</code>, <code>internalTeamUserIds</code> — 464 id) неотличимы от остальных; внутренняя команда не исключается из воронок.</li><li>Раскатка <code>installmentProposal</code> на половину пользователей меняет paywall — конверсия paywall смешивает два варианта.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>При резолве <code>AbTestsStore</code> регистрировать в PostHog super-property <code>experiments = {key: variant}</code> и person property для активных ключей; отправлять <code>$feature_flag_called</code>-подобное событие <code>app_experiment_exposure {key, variant, source}</code> один раз на сессию.</li><li>В GA4 — user property <code>experiment_&lt;key&gt;</code> через dataLayer push при старте.</li><li><code>internalTeamUserIds</code> → person property <code>is_internal = true</code>.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Какие из 30 бэкенд-ключей — реальные эксперименты, а какие — фиче-флаги 100%? (Из базы это не видно: значения решает бэкенд.)</li><li>Есть ли экспорт <code>randomNumber</code> пользователя в хранилище аналитики?</li></ul>"
+    }
+   },
+   "questions": [
+    "Какие из 30 бэкенд-ключей — реальные эксперименты, а какие — фиче-флаги 100%? (Из базы это не видно: значения решает бэкенд.)",
+    "Есть ли экспорт <code>randomNumber</code> пользователя в хранилище аналитики?"
+   ],
+   "notes_html": "<ul><li>q3 ожидаемо пуст. Пустую таблицу показывать с текстом из <code>hint</code> и подписью «0 строк» — это и есть факт.</li><li>q1 группировать по <code>kind</code>; <code>buckets</code> — <code>render: long</code>.</li><li>q5 свернуть по умолчанию (аккордеон «Все 130 флагов»).</li></ul>",
+   "report": {
+    "id": "issue-08",
+    "title": "Экспозиция экспериментов",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Флаги и конфиги с частичной раскаткой или таргетингом",
+      "source": "feature_flag",
+      "hint": "buckets — пересказ конфига по бакетам randomNumber; targeting — аллоу-лист",
+      "select": "single",
+      "sql": "SELECT flag_id, key, kind, buckets, targeting, used_in_chunks FROM feature_flag\nWHERE buckets LIKE '%–%' OR buckets LIKE '%;%' OR targeting IS NOT NULL ORDER BY kind, key"
+     },
+     {
+      "id": "q2",
+      "title": "Выбранный флаг целиком",
+      "source": "feature_flag",
+      "hint": "source — где определён; resolver — как вычисляется; config_value — значение из сборки",
+      "depends_on": "q1",
+      "sql": "SELECT key, kind, source, resolver, config_value, buckets, targeting, used_in_chunks, notes\nFROM feature_flag WHERE flag_id = {{ q1.flag_id | q }}"
+     },
+     {
+      "id": "q3",
+      "title": "Параметры событий, которые могли бы нести группу эксперимента",
+      "source": "param",
+      "hint": "Поиск по именам testingGroup / randomNumber / variant / experiment / ab_group / flag во всех событиях всех систем",
+      "sql": "SELECT p.name, p.value_expr, e.system_id, e.event_name FROM param p JOIN event e USING(event_id)\nWHERE p.name IN ('testingGroup','testing_group','randomNumber','random_number','variant','experiment','experiments','ab_group','flag','feature_flag')"
+     },
+     {
+      "id": "q4",
+      "title": "Ключи бакетирования и person-свойства",
+      "source": "feature_flag (kind = user_bucket) + event (kind = person_properties)",
+      "hint": "Чем распределяются пользователи и что реально выставляется как свойство персоны в PostHog",
+      "sql": "SELECT 'user_bucket' AS what, key AS name, resolver AS detail, notes FROM feature_flag WHERE kind = 'user_bucket'\nUNION ALL\nSELECT 'person_properties', event_name, call_point_id, notes FROM event WHERE kind = 'person_properties'"
+     },
+     {
+      "id": "q5",
+      "title": "Все флаги по видам",
+      "source": "feature_flag",
+      "hint": "Полный инвентарь: kind — механизм (см. field_doc)",
+      "sql": "SELECT kind, key, config_value, buckets, targeting, used_in_chunks FROM feature_flag ORDER BY kind, key"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ],
+     [
+      "q5"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "09",
+   "slug": "names-diverge-and-duplicate",
+   "file": "09-names-diverge-and-duplicate.md",
+   "title": "Имена одного действия расходятся между системами, а в PostHog действие приходит дважды под старым и новым именем",
+   "severity": 5,
+   "hours": 10,
+   "hours_detail": "фронт 5, аналитик 3, QA 2",
+   "stages": [
+    "signup",
+    "login",
+    "onboarding",
+    "checkout",
+    "payment",
+    "token"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>12 точек вызова отправляют в dataLayer и PostHog разные имена (<code>checkout</code> / <code>checkout-start</code>, <code>paymentProceed</code> / <code>purchase_try_nft</code>, <code>CheckoutPaymentMethod</code> / <code>checkout-payment</code>, …). Параллельно идёт миграция на таксономию <code>app_*</code>/<code>site_*</code>: для auth и GMT-покупки PostHog получает и legacy-имя, и новое из одной точки (<code>login</code> + <code>site_auth_login_success</code>, <code>purchase_token</code> + <code>app_gmt_buy_success</code>), а <code>app_gmt_buy_proceed_click</code> отправляется из двух точек одного клика (<code>paymentProceedToken</code> → <code>buyToken</code>). Имена параметров смешивают стили: <code>userId</code>/<code>user_id</code>, <code>clanId</code>/<code>clan_id</code>, <code>sharingType</code>/<code>sharing_type</code>.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>name_mismatch</code>: 12 точек вызова.</li><li>PostHog, точки с ≥2 именами из одного вызова: <code>login</code>, <code>loginError</code>, <code>register</code>, <code>registerEmail</code>, <code>registerError</code>, <code>startRegister</code>, <code>visitLogin</code>, <code>onboardingFinish</code>, <code>onboardingSkipped</code>, <code>clickBuy</code>, <code>buyToken</code>, <code>paymentProceedToken</code>, <code>purchaseToken</code>, <code>customerAcademyStarted</code>, <code>customerCourseStarted</code>, <code>customizeInvitation*</code>, <code>referralPageVisit</code>.</li><li><code>double_dispatch</code>, стадия token: <code>app_gmt_buy_proceed_click</code> ← <code>paymentProceedToken</code> и <code>buyToken</code>. По коду <code>createPayment()</code> вызывает <code>paymentProceedToken()</code> и затем <code>tradingStore.buyGMT()</code>, который вызывает <code>buyToken()</code> — одно нажатие даёт два события.</li><li><code>taxonomy_only_posthog</code>: 44 имени <code>app_*</code>/<code>site_*</code> есть только в PostHog (auth, cards, instant funds, referral, gmt).</li><li><code>param_case_mix</code>: 3 пары.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Воронка, собранная по одной системе, не воспроизводится в другой без таблицы соответствий (её нет в продукте — только в этой базе).</li><li>Двойные имена в PostHog: воронка «login → …» и «site_auth_login_success → …» дают разные числа; при подсчёте «всех событий пользователя» действие считается дважды; <code>app_gmt_buy_proceed_click</code> завышен ×2.</li><li>Смешение <code>userId</code>/<code>user_id</code> ломает фильтры по свойству.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Зафиксировать словарь «действие → каноническое имя» (эта база — <code>call_point_id</code> как ключ) и отправлять одно имя в PostHog; legacy-имена отключить датой.</li><li>Убрать <code>app_gmt_buy_proceed_click</code> из <code>buyToken</code> (оставить в <code>paymentProceedToken</code>).</li><li>В dataLayer — те же канонические имена, GTM-триггеры переименовать.</li><li>Единый стиль ключей payload — snake_case.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Есть ли дата окончания миграции на <code>app_*</code>/<code>site_*</code>? Кто владелец словаря имён?</li></ul>"
+    }
+   },
+   "questions": [
+    "Есть ли дата окончания миграции на <code>app_*</code>/<code>site_*</code>? Кто владелец словаря имён?"
+   ],
+   "notes_html": "<ul><li>q1: колонки <code>dataLayer</code> и <code>posthog</code> рядом, остальные системы — свёрнуты в группу колонок «другие системы».</li><li>q3: чипы имён, где имя начинается с <code>app_</code> или <code>site_</code>, — с обводкой «taxonomy»; остальные — «legacy». Только по префиксу.</li></ul>",
+   "report": {
+    "id": "issue-09",
+    "title": "Расхождение и дублирование имён",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Точки вызова, где имена в dataLayer и PostHog не совпадают",
+      "source": "v_matrix",
+      "hint": "Одна строка — точка вызова; имена во всех системах",
+      "select": "single",
+      "sql": "SELECT m.call_point_id, m.dataLayer, m.posthog, m.firebase_web, m.native_firebase, m.native_facebook, m.appsflyer, m.systems\nFROM v_matrix m\nWHERE m.dataLayer IS NOT NULL AND m.posthog IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM event a JOIN event b ON a.call_point_id = b.call_point_id AND a.event_name = b.event_name\n                  WHERE a.call_point_id = m.call_point_id AND a.system_id = 'gtm_datalayer' AND b.system_id = 'posthog')\nORDER BY m.call_point_id"
+     },
+     {
+      "id": "q2",
+      "title": "События выбранной точки",
+      "source": "event",
+      "hint": "Все отправки из точки вызова с их именами и стилем имени",
+      "depends_on": "q1",
+      "sql": "SELECT system_id, event_name, naming_style, event_version, surface, gtm_tagged, notes FROM event\nWHERE call_point_id = {{ q1.call_point_id | q }} AND kind = 'track' ORDER BY system_id, event_name"
+     },
+     {
+      "id": "q3",
+      "title": "Точки, отправляющие в PostHog два и более имени",
+      "source": "event (system_id = posthog)",
+      "hint": "names — все имена из одной точки; так выглядит параллельная отправка legacy и новой таксономии",
+      "select": "single",
+      "sql": "SELECT call_point_id, COUNT(DISTINCT event_name) AS n, GROUP_CONCAT(DISTINCT event_name) AS names\nFROM event WHERE system_id = 'posthog' AND kind = 'track' AND name_is_dynamic = 0\nGROUP BY call_point_id HAVING n > 1 ORDER BY n DESC, call_point_id",
+      "columns": {
+       "names": {
+        "render": "names"
+       }
+      }
+     },
+     {
+      "id": "q4",
+      "title": "Одно имя PostHog из нескольких точек одной стадии",
+      "source": "journey_step + event",
+      "hint": "Имя, которое отправляется из разных точек вызова внутри одной стадии критического пути",
+      "sql": "SELECT j.stage, e.event_name, GROUP_CONCAT(DISTINCT e.call_point_id) AS points\nFROM journey_step j JOIN event e USING(call_point_id) WHERE e.system_id = 'posthog' AND e.kind = 'track'\nGROUP BY j.stage, e.event_name HAVING COUNT(DISTINCT e.call_point_id) > 1 ORDER BY j.stage, e.event_name",
+      "columns": {
+       "points": {
+        "render": "names"
+       }
+      }
+     },
+     {
+      "id": "q5",
+      "title": "Параметры в двух написаниях",
+      "source": "param",
+      "hint": "Одно нормализованное имя — несколько написаний",
+      "sql": "SELECT LOWER(REPLACE(REPLACE(name,'_',''),'-','')) AS normalized, COUNT(DISTINCT name) AS spellings, GROUP_CONCAT(DISTINCT name) AS names\nFROM param WHERE name NOT LIKE '(%' GROUP BY normalized HAVING spellings > 1",
+      "columns": {
+       "names": {
+        "render": "names"
+       }
+      }
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ],
+     [
+      "q5"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "10",
+   "slug": "intent-fired-as-success",
+   "file": "10-intent-fired-as-success.md",
+   "title": "События-«успехи» срабатывают на намерении: StartTrial до старта, buy_token с ecommerce.purchase до оплаты, «open» на клике",
+   "severity": 5,
+   "hours": 4,
+   "hours_detail": "фронт 2, GTM 1, QA 1",
+   "stages": [
+    "trial",
+    "token",
+    "onboarding"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<ul><li><code>startTrialNft()</code> вызывается в <code>openTrialModal</code> при подтверждении в модалке — до <code>start()</code>; для незалогиненного пользователя — до регистрации (<code>registerAndStartTrial</code>). На <code>StartTrial</code> висят GA4 <code>Start_trial</code>, LinkedIn-конверсия, X-конверсия.</li><li><code>buyToken()</code> вызывается из <code>buyGMT()</code> перед <code>paymentApi.init()</code> и пушит <code>ecommerce.purchase</code> с <code>revenue</code> — по семантике UA это покупка, по факту — инициализация платежа.</li><li><code>clickBuy()</code> отправляет <code>app_gmt_buy_open</code> из <code>doBuy</code> (нажатие кнопки), а не при открытии экрана.</li><li><code>onboardingFinish</code>/<code>onboardingSkipped</code> не отправляются в dataLayer.</li></ul>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>call_site</code> для <code>startTrialNft</code>: <code>openTrialModal</code>, <code>registerAndStartTrial</code>, <code>startTrialInGame</code> (все <code>trigger_kind = method</code>); в <code>registerAndStartTrial</code> следом идёт <code>startRegister(\"trial\")</code>.</li><li><code>v_gtm_destination</code>, <code>StartTrial</code>: GA4 150 <code>Start_trial</code>, LinkedIn 228, Custom HTML 428/467 (X Ads), тег 246 на паузе.</li><li><code>param</code> <code>buy_token</code> (dataLayer): <code>ecommerce = {purchase:{actionField:{id:e.id, affiliation:\"web\", revenue:e.value, coupon:e.promocode}}}</code>; <code>gtm_tagged = 0</code>.</li><li><code>param</code> <code>app_gmt_buy_open</code>: <code>cta_name = \"gmt_buy_open\"</code>, вызов из <code>doBuy</code> / <code>goToUnifiedConfirm</code>.</li><li><code>journey_success_without_datalayer</code>: <code>onboardingFinish</code> → posthog, firebase_web, native_firebase, appsflyer; dataLayer пусто.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Конверсия в trial в GA4/LinkedIn/X завышена на долю тех, кто подтвердил модалку, но не завершил регистрацию или старт.</li><li>Если кто-то включит тег на <code>buy_token</code>, GA4 получит «покупки» на этапе намерения.</li><li>Воронка GMT в PostHog: «open» = клик, реального показа экрана нет.</li><li>GA4 не видит завершение онбординга — сегментация «прошёл онбординг → купил» невозможна в GA4.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li><code>startTrialNft()</code> перенести в <code>subscribe</code> успешного <code>start()</code>; для незалогиненных — после регистрации по флагу <code>START_TRIAL_BY_LOGGED_IN_KEY</code> (он уже есть).</li><li><code>buy_token</code>: убрать <code>ecommerce.purchase</code>, оставить <code>payment_init</code>; покупку слать из <code>purchaseToken</code> (см. 01).</li><li><code>app_gmt_buy_open</code> вызывать в <code>ngOnInit</code> экрана покупки; клик — <code>app_gmt_buy_proceed_click</code> (уже есть).</li><li><code>onboardingFinish</code>/<code>Skipped</code> добавить в dataLayer.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Какой момент считать «trial started» для маркетинга: подтверждение модалки или успешный ответ <code>start()</code>?</li></ul>"
+    }
+   },
+   "questions": [
+    "Какой момент считать «trial started» для маркетинга: подтверждение модалки или успешный ответ <code>start()</code>?"
+   ],
+   "notes_html": "<ul><li>q1: <code>enclosing_method</code> — моноширинный; строка <code>registerAndStartTrial</code> и <code>openTrialModal</code> — без специальной подсветки, но <code>trigger_kind</code> показывать бейджем (<code>subscription</code> зелёный, <code>method</code>/<code>handler</code> серый, <code>init</code> синий).</li><li>q3: <code>paused = 1</code> — строка приглушена.</li></ul>",
+   "report": {
+    "id": "issue-10",
+    "title": "Успех на намерении",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Места вызова событий trial, buy_token, buy_open, onboarding",
+      "source": "v_event_site",
+      "hint": "enclosing_method — метод компонента; trigger_kind = method означает вызов из обычного метода, не из подписки на результат",
+      "select": "single",
+      "sql": "SELECT DISTINCT call_point_id, chunk_label, enclosing_method, trigger_kind, arg_expr\nFROM v_event_site WHERE call_point_id IN ('AnalyticsService.startTrialNft','AnalyticsService.buyToken','AnalyticsService.clickBuy',\n  'AnalyticsService.onboardingFinish','AnalyticsService.onboardingSkipped','AnalyticsService.startRegister')\nORDER BY call_point_id, call_site_id"
+     },
+     {
+      "id": "q2",
+      "title": "События и параметры выбранной точки",
+      "source": "event + param",
+      "hint": "Ищите ecommerce.purchase в buy_token и cta_name в app_gmt_buy_open",
+      "depends_on": "q1",
+      "sql": "SELECT e.system_id, e.event_name, e.gtm_tagged, p.name, p.value_expr, p.value_literals\nFROM event e LEFT JOIN param p USING(event_id)\nWHERE e.call_point_id = {{ q1.call_point_id | q }} AND e.kind = 'track' ORDER BY e.system_id, e.event_name, p.param_id"
+     },
+     {
+      "id": "q3",
+      "title": "Куда GTM отправляет StartTrial и buy_token",
+      "source": "v_gtm_destination",
+      "hint": "Один тег — одна строка; paused = 1 — тег выключен",
+      "sql": "SELECT source_event, vendor, vendor_event, ids, consent_categories, paused FROM v_gtm_destination\nWHERE source_event IN ('StartTrial','buy_token','buy_clicked') ORDER BY source_event, vendor"
+     },
+     {
+      "id": "q4",
+      "title": "Успехи критического пути без dataLayer",
+      "source": "v_journey",
+      "hint": "role = success и пустой dataLayer",
+      "sql": "SELECT stage, call_point_id, note, posthog, firebase_web, native_firebase, appsflyer FROM v_journey\nWHERE role = 'success' AND dataLayer IS NULL ORDER BY stage_no"
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2",
+      "q3"
+     ],
+     [
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "11",
+   "slug": "payment-failure-untracked",
+   "file": "11-payment-failure-untracked.md",
+   "title": "Неуспех оплаты NFT не фиксируется; метод оплаты — непрозрачный аргумент",
+   "severity": 6,
+   "hours": 6,
+   "hours_detail": "фронт 3, аналитик 1, QA 2",
+   "stages": [
+    "checkout",
+    "payment",
+    "purchase"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Между <code>paymentProceed</code> (переход к провайдеру) и <code>purchase</code> (сообщение сокета) нет ни одного события: отказ провайдера, отмена, таймаут, ошибка KYC-гейта перед покупкой (<code>navigateToKycBeforePurchase</code> в <code>createPaymentByProvider</code>) — всё это выглядит как «ушёл и не вернулся». Единственные ошибки в покупочных воронках — <code>app_nft_*_promo_error</code> (промокод) и <code>app_wallet_buy-crypto_error</code>. Значение метода оплаты в <code>chooseMethod</code>/<code>changeMethod</code> приходит минифицированным аргументом; из кода известны ключи провайдеров (<code>binance</code>, <code>coinbase</code>, <code>gate</code>, <code>card/advcash</code>, <code>alchemy</code>, <code>p2p/multihub</code>, <code>mercuryo</code>, <code>moonpay</code>, <code>unlimit</code>, <code>ecommpay</code>, <code>iap</code>, <code>virtual</code>), но что именно попадает в <code>method</code> — из точек вызова не видно.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>funnel_terminals</code>: <code>nft / buy_nft</code> — success только <code>promo_success</code>, error только <code>promo_error</code>; у ядра (<code>AnalyticsService</code>) имён с <code>error</code>/<code>fail</code> для покупки нет (<code>purchase_try_nft</code> → <code>purchase</code>).</li><li><code>call_site</code> <code>paymentProceedCreateMiner</code>: 8 мест (<code>doPay</code>, <code>createCollectionPayment</code>, <code>createPaymentByVirtual/Provider/PwaPay/Iap</code>), <code>paymentProceedNftBag</code>: <code>buyWithButton</code>, <code>toCheckOut</code>.</li><li><code>param</code> <code>method</code> в <code>choose_method</code>/<code>change_method</code>: <code>value_kind = from_argument</code>, <code>value_literals</code> пусто; <code>call_site.arg_expr</code>: <code>\"nft-iap\"</code>, <code>e</code>, <code>n</code>, <code>t</code>, <code>i</code>.</li><li>GA4 <code>checkout_payment_choose</code> (176) читает <code>method</code> и авто-переменную <code>method_details</code> (текст кликнутого элемента).</li><li><code>initKYC</code>/<code>startKYC</code> → <code>kyc0</code>/<code>kyc1</code> — только начало; результата KYC в ядре нет (результаты есть только в воронках карт и Instant Funds).</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Падение между <code>payment_proceed</code> и <code>purchase</code> нельзя разложить на «провайдер отказал», «пользователь передумал», «требуется KYC».</li><li>Сравнение провайдеров по успешности невозможно ни в PostHog, ни в GA4 (в GA4 <code>method</code> есть только на выборе, не на результате).</li><li>Влияние KYC-гейта на выручку неизвестно.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Добавить <code>purchase_failed {provider, reason, stage}</code> из обработчиков ошибок <code>checkOut*</code>/<code>createPayment*</code> и из сокета (если бэкенд шлёт отказ).</li><li><code>kyc_required {trigger: \"purchase\", amount}</code> в <code>navigateToKycBeforePurchase</code>; <code>kyc_result {level, status}</code> при смене статуса (уже есть <code>setStatus</code> в KYC-сторе — рядом с <code>setUserLevel1Status</code>).</li><li><code>method</code> — передавать <code>selectedPaymentType.key</code> (словарь ключей провайдеров) и дублировать его в <code>paymentProceed</code>.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Приходит ли с бэкенда событие отказа оплаты (webhook → socket)? Если нет, клиент видит только успех.</li></ul>"
+    }
+   },
+   "questions": [
+    "Приходит ли с бэкенда событие отказа оплаты (webhook → socket)? Если нет, клиент видит только успех."
+   ],
+   "notes_html": "<ul><li>q1: пустые <code>success_names</code>/<code>error_names</code> — серый фон ячейки. Строку <code>nft / buy_nft</code> не выделять отдельно: пользователь найдёт её сам по фильтру <code>product = nft</code>.</li><li>q3: показывать как «лестницу» — обычная таблица, но стадии отделены разделителями (row grouping по <code>stage</code>).</li></ul>",
+   "report": {
+    "id": "issue-11",
+    "title": "Неуспех оплаты и метод оплаты",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Есть ли у воронок финал: success/complete и error/reject/cancel",
+      "source": "event + call_point (product_tracker, PostHog)",
+      "hint": "Одна строка — воронка продуктового трекера; списки имён, которые оканчиваются на success/complete и error/reject/cancel",
+      "select": "single",
+      "sql": "SELECT cp.product, cp.funnel_name, COUNT(DISTINCT e.event_name) AS names,\n  GROUP_CONCAT(DISTINCT CASE WHEN e.event_name LIKE '%success%' OR e.event_name LIKE '%complete%' THEN e.event_name END) AS success_names,\n  GROUP_CONCAT(DISTINCT CASE WHEN e.event_name LIKE '%error%' OR e.event_name LIKE '%reject%' OR e.event_name LIKE '%cancel%' OR e.event_name LIKE '%fail%' THEN e.event_name END) AS error_names\nFROM event e JOIN call_point cp USING(call_point_id)\nWHERE cp.layer = 'product_tracker' AND e.system_id = 'posthog' GROUP BY 1, 2 ORDER BY 1, 2",
+      "columns": {
+       "success_names": {
+        "render": "names"
+       },
+       "error_names": {
+        "render": "names"
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "Все имена выбранной воронки",
+      "source": "event",
+      "hint": "Имена PostHog в воронке с точками вызова",
+      "depends_on": "q1",
+      "sql": "SELECT DISTINCT e.event_name, e.call_point_id, e.notes FROM event e JOIN call_point cp USING(call_point_id)\nWHERE e.system_id = 'posthog' AND cp.product = {{ q1.product | q }} AND COALESCE(cp.funnel_name,'') = COALESCE({{ q1.funnel_name | q }},'')\nORDER BY e.event_name"
+     },
+     {
+      "id": "q3",
+      "title": "Имена ядра на пути payment → purchase",
+      "source": "v_journey",
+      "hint": "Между payment и purchase других точек вызова в разметке нет",
+      "sql": "SELECT stage, role, call_point_id, note, dataLayer, posthog, firebase_web, native_facebook FROM v_journey\nWHERE stage IN ('kyc','payment','purchase') ORDER BY stage_no, step_id"
+     },
+     {
+      "id": "q4",
+      "title": "Откуда вызываются paymentProceed* и что передаётся в method",
+      "source": "v_event_site",
+      "hint": "arg_expr в chooseMethod/changeMethod — единственный источник значений method",
+      "sql": "SELECT DISTINCT call_point_id, chunk_label, enclosing_method, trigger_kind, arg_expr FROM v_event_site\nWHERE call_point_id IN ('AnalyticsService.paymentProceedCreateMiner','AnalyticsService.paymentProceedNftBag',\n  'AnalyticsService.choosePaymentMethodCreateMiner','AnalyticsService.chooseNftBagPaymentMethod',\n  'AnalyticsService.changePaymentMethodCreateMiner','AnalyticsService.changeNftBagPaymentMethod',\n  'AnalyticsService.initKYC','AnalyticsService.startKYC')\nORDER BY call_point_id, call_site_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3"
+     ],
+     [
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "12",
+   "slug": "platform-and-surface",
+   "file": "12-platform-and-surface.md",
+   "title": "Платформа (web / iOS / Android) не передаётся в событиях PostHog; surface = \"site\" зашит в auth-события",
+   "severity": 5,
+   "hours": 3,
+   "hours_detail": "фронт 2, QA 1",
+   "stages": [
+    "все"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p><code>window.platformForAnalytics</code> (<code>ios | android | browser</code>) выставляется в конструкторе <code>AnalyticsService</code>, но используется только GTM: свойство пользователя <code>platform</code> в GA4 config-теге и параметр в <code>login_page_view</code>. В события PostHog платформа не попадает; есть литерал <code>surface</code>: <code>\"app\"</code> в 367 строках и <code>\"site\"</code> в 8 auth-событиях — вне зависимости от того, где работает клиент. В AppsFlyer платформа есть (<code>platform</code>), в dataLayer — только <code>isApplication</code> в <code>startReg</code>.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>param</code> <code>surface = \"site\"</code> (const): <code>site_auth_login_view/success/error</code>, <code>site_auth_signup_view/method_select/success/error</code>, <code>site_user_identified</code> — все из ядра, вызываются и внутри TWA.</li><li><code>param</code> <code>surface = \"app\"</code> (const): 367 строк; <code>surface = this.user ? \"app\" : \"site\"</code> — 1 строка.</li><li><code>gtm_tag_param</code>: переменная 4 (<code>window.platformForAnalytics</code>) — теги 113 (<code>user_property platform</code>) и 209.</li><li><code>param</code> <code>platform</code> (<code>\"ios\" | \"android\"</code>) — только AppsFlyer, 12 событий; <code>isApplication</code> — только <code>startReg</code>.</li><li><code>system.gating</code>: <code>firebase_web</code> молчит в приложении; <code>native_firebase</code> — только в приложении. То есть один и тот же <code>checkout-start</code> в вебе уходит в <code>firebase_web</code>, а в приложении — в <code>native_firebase</code>.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>В PostHog воронку нельзя разбить на web / iOS / Android иначе как по <code>$os</code>/<code>$browser</code> (TWA неотличима от Chrome).</li><li><code>surface = \"site\"</code> на регистрации внутри приложения — ложный сегмент.</li><li>GA4: платформа только как user property, которое перезаписывается при переключении устройств.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li><code>posthog.register({platform: window.platformForAnalytics, app_version: buildVersion})</code> в <code>loadPostHog()</code>.</li><li><code>surface</code> вычислять из <code>platformForAnalytics</code>, не литералом.</li><li>В dataLayer добавить <code>platform</code> в <code>push()</code> рядом с <code>cid</code>.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Нужна ли отдельная маркировка TWA-обёртки против браузера на Android (сейчас <code>isAndroidAppAccess</code>)?</li></ul>"
+    }
+   },
+   "questions": [
+    "Нужна ли отдельная маркировка TWA-обёртки против браузера на Android (сейчас <code>isAndroidAppAccess</code>)?"
+   ],
+   "notes_html": "<ul><li>q1: <code>value_literals</code> — чипы; строка с <code>\"site\"</code> и <code>\"app\"</code> рядом — без подсветки, пользователь увидит контраст сам.</li><li>q4: <code>gating</code> — <code>render: long</code>, <code>in_apk</code> — bool.</li></ul>",
+   "report": {
+    "id": "issue-12",
+    "title": "Платформа и surface",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Параметры, описывающие платформу, по системам",
+      "source": "param",
+      "hint": "Одна строка — имя параметра × выражение; occurrences — сколько событий его несут",
+      "select": "single",
+      "sql": "SELECT p.name, p.value_expr, p.value_literals, COUNT(*) AS occurrences, GROUP_CONCAT(DISTINCT e.system_id) AS systems\nFROM param p JOIN event e USING(event_id)\nWHERE p.name IN ('surface','platform','isApplication','device','os','app_version','build_version')\nGROUP BY 1, 2 ORDER BY 1, 4 DESC",
+      "columns": {
+       "systems": {
+        "render": "names"
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "События с выбранным значением",
+      "source": "event",
+      "hint": "Все события, где параметр имеет такое выражение",
+      "depends_on": "q1",
+      "sql": "SELECT e.system_id, e.event_name, e.call_point_id FROM param p JOIN event e USING(event_id)\nWHERE p.name = {{ q1.name | q }} AND p.value_expr = {{ q1.value_expr | q }} ORDER BY e.system_id, e.event_name"
+     },
+     {
+      "id": "q3",
+      "title": "Где GTM использует window.platformForAnalytics",
+      "source": "gtm_tag_param + gtm_variable",
+      "hint": "Переменная типа js_global; slot — как тег её использует",
+      "sql": "SELECT g.tag_id, g.vendor, g.vendor_event, tp.slot, tp.param, v.name AS reads_variable, v.source_kind\nFROM gtm_tag_param tp JOIN gtm_variable v ON v.var_id = tp.var_id JOIN gtm_tag g ON g.tag_id = tp.tag_id\nWHERE v.source_kind = 'js_global' ORDER BY g.tag_id"
+     },
+     {
+      "id": "q4",
+      "title": "Как системы делят веб и приложение",
+      "source": "system",
+      "hint": "gating — условия из кода: где система молчит",
+      "sql": "SELECT system_id, title, transport, gating, in_apk FROM system\nWHERE system_id IN ('firebase_web','native_firebase','native_facebook','appsflyer','posthog','posthog_android','gtm_datalayer') ORDER BY system_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "13",
+   "slug": "gtm-dead-and-untagged",
+   "file": "13-gtm-dead-and-untagged.md",
+   "title": "GTM: 231 имя dataLayer без тега, 6 тегов без источника, Reddit-тег на каждое событие, мёртвая ветка owox_pageview",
+   "severity": 5,
+   "hours": 10,
+   "hours_detail": "GTM 6, фронт 2, QA 2",
+   "stages": [
+    "все"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Клиент кладёт в dataLayer 266 разных имён; активный тег есть у 35 (<code>gtm_tagged = 1</code>). Без тега — вся новая таксономия <code>app_*</code> (159 имён: NFT-paywall, кошелёк, подписки, Miner Wars), все <code>step_*</code> (26) и 46 legacy-имён. В обратную сторону: 6 триггеров ждут имена, которых клиент не отправляет (<code>purchase</code>, <code>purchase_try_nft</code>, <code>copyAddress</code>, <code>form_submit</code>, <code>homePageTabChanged</code>, <code>selectNetwork</code>). Тег Reddit 398 стоит на триггере <code>{__e} _re .+</code> — срабатывает на <strong>каждый</strong> push с именем события в качестве типа события Reddit. <code>visitLogin</code>/<code>visitPage</code> пушат <code>page</code> с полем <code>event: \"owox_pageview\"</code>, которое перекрывает имя; ни на <code>page</code>, ни на <code>owox_pageview</code> тегов нет; ветка OWOX-схемы в <code>push()</code> не включается ни одним вызовом.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>gtm_untagged</code>: 242 строки «имя × точка вызова», 231 разное имя; по стилям — product_taxonomy 159, legacy 46, step_code 26.</li><li><code>gtm_tag_without_producer</code>: 6 имён.</li><li><code>gtm_catch_all</code>: тег 398 Reddit, <code>eventType = {{Event}}</code> (переменная типа <code>event_name</code>).</li><li><code>event_name_override</code>: 2 события (<code>visitLogin</code>, <code>visitPage</code>), <code>event_name = owox_pageview</code>, <code>gtm_tagged = 0</code>.</li><li><code>owox_schema_usage</code>: <code>owox_schema = 0</code> у всех 292 dataLayer-событий.</li><li>17 тегов на паузе (<code>gtm_tag.paused = 1</code>), среди них старые Meta-теги на <code>signup</code>, <code>StartTrial</code>, <code>checkout</code>, <code>paymentProceed</code>, <code>add_to_cart_*</code>.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>GA4 не получает ни одного события новой таксономии: продуктовые воронки (paywall NFT, депозит, подписки) существуют только в PostHog.</li><li>Reddit получает поток кастомных событий с произвольными именами — расход бюджета пикселя и шум в отчётах Reddit.</li><li>Мёртвые триггеры вводят в заблуждение: в GA4 есть событие <code>purchase_try_nft</code>, которого никогда не будет.</li><li><code>page</code>/<code>owox_pageview</code> — ~3 вызова на страницу без потребителя.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>Один универсальный GA4-тег на триггер <code>{__e} _re ^app_|^site_</code> с <code>event name = {{Event}}</code> и параметрами <code>product</code>, <code>funnel_name</code>, <code>cta_name</code>, <code>event_version</code>, <code>surface</code>, <code>user_id</code> — покрывает 159 имён одним тегом.</li><li>Удалить/перевесить 6 триггеров без источника; удалить теги на паузе, если они не планируются.</li><li>Reddit 398: триггер сузить до конкретных имён или удалить.</li><li>Удалить <code>visitPage</code>/<code>visitLogin</code> или дать им потребителя.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Планируется ли GA4 как система для продуктовых воронок, или только PostHog? От этого зависит п. 1.</li><li>Reddit-тег на все события — намеренно?</li></ul>"
+    }
+   },
+   "questions": [
+    "Планируется ли GA4 как система для продуктовых воронок, или только PostHog? От этого зависит п. 1.",
+    "Reddit-тег на все события — намеренно?"
+   ],
+   "notes_html": "<ul><li>q1 — три строки, показать крупно (карточки с числом <code>names</code>), клик по карточке = выбор мастера.</li><li>q2 группировать по <code>product</code>.</li><li>q4 — таблица из одной-двух строк; <code>condition</code> моноширинный.</li></ul>",
+   "report": {
+    "id": "issue-13",
+    "title": "GTM: без тега, без источника, catch-all",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Имена dataLayer без активного тега, по стилю имени",
+      "source": "event",
+      "hint": "Одна строка — стиль имени; names — сколько разных имён; points — сколько точек вызова",
+      "select": "single",
+      "sql": "SELECT naming_style, COUNT(DISTINCT event_name) AS names, COUNT(DISTINCT call_point_id) AS points\nFROM event WHERE system_id = 'gtm_datalayer' AND gtm_tagged = 0 AND kind = 'track' GROUP BY naming_style ORDER BY names DESC"
+     },
+     {
+      "id": "q2",
+      "title": "Имена без тега выбранного стиля",
+      "source": "event",
+      "hint": "Одна строка — имя × точка вызова",
+      "depends_on": "q1",
+      "sql": "SELECT DISTINCT e.event_name, e.call_point_id, cp.product, cp.funnel_name FROM event e JOIN call_point cp USING(call_point_id)\nWHERE e.system_id = 'gtm_datalayer' AND e.gtm_tagged = 0 AND e.kind = 'track' AND e.naming_style = {{ q1.naming_style | q }}\nORDER BY e.event_name"
+     },
+     {
+      "id": "q3",
+      "title": "Триггеры на имена, которых клиент не отправляет",
+      "source": "gtm_route + gtm_tag",
+      "hint": "source_event — имя из условия триггера; его нет среди event.event_name для dataLayer",
+      "sql": "SELECT r.source_event, g.tag_id, g.vendor, g.vendor_event, g.paused\nFROM gtm_route r JOIN gtm_tag g ON g.tag_id = r.tag_id\nWHERE r.source_event IS NOT NULL AND r.source_event NOT LIKE 'gtm.%'\n  AND r.source_event NOT IN (SELECT event_name FROM event WHERE system_id = 'gtm_datalayer')\nORDER BY r.source_event, g.tag_id"
+     },
+     {
+      "id": "q4",
+      "title": "Теги, срабатывающие на любое событие",
+      "source": "gtm_route + gtm_tag + gtm_tag_param",
+      "hint": "Условие с регулярным выражением .+ означает любой push",
+      "sql": "SELECT r.condition, g.tag_id, g.vendor, g.vendor_event, tp.slot, tp.param, v.name AS reads, v.source_kind\nFROM gtm_route r JOIN gtm_tag g USING(tag_id)\nLEFT JOIN gtm_tag_param tp ON tp.tag_id = g.tag_id LEFT JOIN gtm_variable v ON v.var_id = tp.var_id\nWHERE r.condition LIKE '%_re .+%'"
+     },
+     {
+      "id": "q5",
+      "title": "Теги на паузе и их триггеры",
+      "source": "gtm_tag + gtm_route",
+      "hint": "paused = 1 — тег выключен в контейнере",
+      "sql": "SELECT g.tag_id, g.notes, r.source_event, r.condition FROM gtm_tag g JOIN gtm_route r USING(tag_id) WHERE g.paused = 1 ORDER BY r.source_event"
+     },
+     {
+      "id": "q6",
+      "title": "События, чьё имя перекрыто полем event из payload",
+      "source": "event + param",
+      "hint": "push(\"page\", {event:\"owox_pageview\"}) — в dataLayer уходит owox_pageview",
+      "sql": "SELECT e.event_id, e.event_name, e.call_point_id, e.gtm_tagged, p.value_expr AS payload_event, e.notes\nFROM event e JOIN param p USING(event_id) WHERE e.system_id = 'gtm_datalayer' AND p.name = 'event'"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ],
+     [
+      "q5",
+      "q6"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "14",
+   "slug": "android-bridge-drops-facebook",
+   "file": "14-android-bridge-drops-facebook.md",
+   "title": "Android-обёртка отбрасывает все события с provider ≠ firebase: Meta SDK не получает ничего из приложения",
+   "severity": 5,
+   "hours": 8,
+   "hours_detail": "Android 5, QA 3",
+   "stages": [
+    "signup",
+    "select",
+    "checkout",
+    "payment",
+    "purchase"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Веб-слой шлёт в нативный мост события двух провайдеров: <code>firebase</code> (14 имён) и <code>facebook</code> (13 имён: <code>CompleteRegistration</code>, <code>Purchase</code>, <code>InitiateCheckout</code>, <code>AddPaymentInfo</code>, <code>StartTrial</code>, <code>fb_mobile_*</code>). <code>PwaAnalyticsService.push</code> на Android отправляет сообщение только когда <code>analyticsSupported &amp;&amp; (!provider || provider === \"firebase\")</code>; в APK <code>AnalyticsActivity.d()</code> дополнительно возвращается, если <code>provider != \"firebase\"</code>. На iOS мост передаёт все провайдеры (<code>webkit.messageHandlers</code>), нативный код iOS не анализировался. Legacy-канал <code>analytic-event</code> (<code>mobileAppLegacy</code>) используется для <code>CompleteRegistration</code> и <code>start_trial</code>.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>system.native_facebook.gating</code>: «на Android мост отбрасывает provider!=firebase; веб-слой на Android facebook-события не отправляет».</li><li><code>system.native_firebase.notes</code>: «AnalyticsActivity принимает JSON {event, provider, payload} и вызывает logEvent только при provider == firebase».</li><li><code>event</code>, <code>system_id = native_facebook</code>: 13 имён, все из ядра; <code>native_legacy</code>: <code>CompleteRegistration</code>, <code>start_trial</code>.</li><li><code>system.native_facebook.ids</code>: appId 419249616750689 — SDK присутствует в APK (<code>in_apk = 1</code>), но событий из веб-слоя не получает.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Meta не получает <code>Purchase</code>/<code>CompleteRegistration</code> из Android-приложения: оптимизация app-кампаний на покупку и атрибуция инсталлов к покупкам по Android не работают.</li><li>Сравнение iOS/Android по Meta-конверсиям заведомо смещено.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>В <code>AnalyticsActivity.d()</code> добавить ветку <code>provider == \"facebook\"</code> → <code>AppEventsLogger.logEvent(name, valueToSum, bundle)</code>; в <code>PwaAnalyticsService.push</code> снять фильтр на Android.</li><li>Проверить iOS-обёртку на симметричную реализацию.</li><li>Альтернатива: слать Meta-события с сервера (CAPI) и отключить нативный канал вовсе.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Ведутся ли Meta app-кампании на Android? Если нет — severity ниже.</li><li>Реализован ли <code>facebook</code>-провайдер в iOS-обёртке?</li></ul>"
+    }
+   },
+   "questions": [
+    "Ведутся ли Meta app-кампании на Android? Если нет — severity ниже.",
+    "Реализован ли <code>facebook</code>-провайдер в iOS-обёртке?"
+   ],
+   "notes_html": "<ul><li>q1: <code>system_id = native_facebook</code> — бейдж системы синий; фильтр по системе — чипы над таблицей.</li><li>q3: две колонки <code>gating</code> и <code>notes</code> занимают 70% ширины.</li></ul>",
+   "report": {
+    "id": "issue-14",
+    "title": "Android-мост и провайдер facebook",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "События по провайдерам нативного моста",
+      "source": "event (native_*)",
+      "hint": "Одна строка — имя события × система; notes — условие отправки",
+      "select": "single",
+      "sql": "SELECT e.system_id, e.event_name, e.call_point_id, e.notes FROM event e\nWHERE e.system_id IN ('native_facebook','native_firebase','native_legacy') AND e.kind = 'track'\nORDER BY e.system_id, e.call_point_id"
+     },
+     {
+      "id": "q2",
+      "title": "Payload выбранного события",
+      "source": "param",
+      "hint": "Что уходит в мост для этого события",
+      "depends_on": "q1",
+      "sql": "SELECT p.name, p.value_expr, p.value_kind, p.presence FROM param p JOIN event e USING(event_id)\nWHERE e.system_id = {{ q1.system_id | q }} AND e.event_name = {{ q1.event_name | q }} AND e.call_point_id = {{ q1.call_point_id | q }}\nORDER BY p.param_id"
+     },
+     {
+      "id": "q3",
+      "title": "Нативные системы: транспорт и условия",
+      "source": "system",
+      "hint": "transport — как данные уходят; gating — когда система молчит; notes — что делает нативный код",
+      "sql": "SELECT system_id, title, transport, endpoint, gating, in_apk, notes FROM system\nWHERE system_id IN ('native_firebase','native_facebook','native_legacy','native_auth_bridge','posthog_android') ORDER BY system_id",
+      "columns": {
+       "gating": {
+        "render": "long"
+       },
+       "notes": {
+        "render": "long"
+       }
+      }
+     },
+     {
+      "id": "q4",
+      "title": "Точки ядра, которые шлют в оба провайдера",
+      "source": "v_matrix",
+      "hint": "Имена в native_firebase и native_facebook из одной точки вызова",
+      "sql": "SELECT call_point_id, native_firebase, native_facebook, posthog, dataLayer FROM v_matrix\nWHERE native_facebook IS NOT NULL ORDER BY call_point_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3"
+     ],
+     [
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "15",
+   "slug": "step-funnels-collide",
+   "file": "15-step-funnels-collide.md",
+   "title": "Воронки карт и Instant Funds: короткие имена step_N совпадают между продуктами, не тегированы и расходятся в product",
+   "severity": 4,
+   "hours": 4,
+   "hours_detail": "фронт 2, GTM 1, QA 1",
+   "stages": [
+    "funding (карты, Instant Funds)"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p><code>BankingCardsAnalyticsService</code> и <code>InstantFundsAnalyticsService</code> отправляют в dataLayer короткие коды шагов (<code>step_2</code> … <code>step_19</code>), а в PostHog — и короткие, и семантические (<code>app_cards_create_open</code>, <code>app_instant-funds_kyc_start</code>). Восемь кодов (<code>step_2</code> … <code>step_9</code>) существуют в обоих продуктах. Ни один <code>step_*</code> не имеет тега в GTM. В payload карт <code>product</code> пишется как <code>\"card\"</code> в коротких событиях и <code>\"cards\"</code> в семантических.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>step_name_collision</code>: 8 имён, <code>in_products = card, instant_funds</code>.</li><li><code>step_names_in_datalayer</code>: 26 имён, <code>gtm_tagged = 0</code> у всех.</li><li><code>param</code> <code>product</code>: <code>step_2</code> → <code>[\"card\"]</code> (dataLayer и PostHog), <code>app_cards_create_open</code> → <code>[\"cards\"]</code>.</li><li><code>taxonomy_only_posthog</code>: 13 имён карт и 11 имён Instant Funds есть только в PostHog.</li><li><code>event.notes</code> у карт: одно короткое имя (<code>step_6_2</code>) соответствует трём разным состояниям (<code>wallet-deposit start | failure | success</code>).</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>В GA4 воронок карт и Instant Funds нет вовсе; в dataLayer они есть, но без тегов.</li><li>В PostHog по <code>step_N</code> нельзя отличить продукты без фильтра по <code>product</code>; <code>product</code> при этом имеет два написания.</li><li><code>step_6_2</code> смешивает старт, ошибку и успех депозита.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li>В dataLayer отправлять семантические имена (как в PostHog), короткие — убрать.</li><li>Единый <code>product = \"cards\"</code>.</li><li>Универсальный GA4-тег на <code>app_*</code> (см. 13).</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Кто потребитель <code>step_N</code> в dataLayer сейчас? Если никто — просто удалить.</li></ul>"
+    }
+   },
+   "questions": [
+    "Кто потребитель <code>step_N</code> в dataLayer сейчас? Если никто — просто удалить."
+   ],
+   "notes_html": "<ul><li>q1: имена, встречающиеся с двумя разными <code>product</code>, показать рядом (сортировка по имени уже это делает); подсветки не нужно.</li><li>q3: <code>product</code> — чипы.</li></ul>",
+   "report": {
+    "id": "issue-15",
+    "title": "Коллизии step_N",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Короткие имена шагов в dataLayer",
+      "source": "event + call_point",
+      "hint": "Одна строка — имя × product; gtm_tagged — есть ли активный тег; points — точки вызова",
+      "select": "single",
+      "sql": "SELECT e.event_name, cp.product, e.gtm_tagged, GROUP_CONCAT(DISTINCT e.call_point_id) AS points\nFROM event e JOIN call_point cp USING(call_point_id)\nWHERE e.system_id = 'gtm_datalayer' AND e.naming_style = 'step_code' GROUP BY 1, 2 ORDER BY 1, 2",
+      "columns": {
+       "points": {
+        "render": "names"
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "Все отправки выбранного имени и их состояния",
+      "source": "event + param",
+      "hint": "notes — состояние машины шагов; payload — параметры",
+      "depends_on": "q1",
+      "sql": "SELECT e.system_id, e.event_name, e.call_point_id, e.notes, GROUP_CONCAT(p.name || '=' || COALESCE(p.value_expr,''), ' | ') AS payload\nFROM event e LEFT JOIN param p USING(event_id)\nWHERE e.event_name = {{ q1.event_name | q }} GROUP BY e.event_id ORDER BY e.system_id, e.call_point_id"
+     },
+     {
+      "id": "q3",
+      "title": "Значения product в воронках карт и Instant Funds",
+      "source": "param",
+      "hint": "Одна строка — значение product × система; events — сколько событий",
+      "sql": "SELECT e.system_id, p.value_literals AS product, cp.service, COUNT(*) AS events\nFROM param p JOIN event e USING(event_id) JOIN call_point cp USING(call_point_id)\nWHERE p.name = 'product' AND cp.service IN ('BankingCardsAnalyticsService','InstantFundsAnalyticsService')\nGROUP BY 1, 2, 3 ORDER BY 3, 1, 2"
+     },
+     {
+      "id": "q4",
+      "title": "Семантические имена, которых нет в dataLayer",
+      "source": "event",
+      "hint": "Имена app_* этих трекеров, отправляемые только в PostHog",
+      "sql": "SELECT DISTINCT e.event_name, e.call_point_id FROM event e JOIN call_point cp USING(call_point_id)\nWHERE e.system_id = 'posthog' AND e.naming_style = 'product_taxonomy'\n  AND cp.service IN ('BankingCardsAnalyticsService','InstantFundsAnalyticsService')\n  AND NOT EXISTS (SELECT 1 FROM event d WHERE d.system_id = 'gtm_datalayer' AND d.call_point_id = e.call_point_id AND d.event_name = e.event_name)\nORDER BY e.event_name"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "16",
+   "slug": "kyc-and-subscription-gaps",
+   "file": "16-kyc-and-subscription-gaps.md",
+   "title": "KYC и подписки: нет результата KYC в основном пути, подписка не имеет события успеха и учитывается как апгрейд",
+   "severity": 5,
+   "hours": 5,
+   "hours_detail": "фронт 3, QA 2",
+   "stages": [
+    "kyc",
+    "purchase",
+    "subscriptions"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>В ядре KYC представлен двумя событиями начала (<code>kyc0</code> — открытие модалки, <code>kyc1</code> — старт) и двумя полями статуса (<code>verificationStatusLevel1/2</code>), которые попадают только в <code>signup</code> и <code>login</code> dataLayer. Результат KYC (успех/отказ) в основном пути не отправляется; он есть только внутри воронок карт, Instant Funds и Uphold-депозита. Перед покупкой через <code>ecommpay</code> работает KYC-гейт (<code>checkNeededKycBeforePurchase</code> → <code>navigateToKycBeforePurchase</code>) без события. <code>SubscriptionsAnalyticsService</code> имеет <code>open</code>, <code>type-select</code>, <code>payment-method_select</code>, <code>proceed</code>, <code>cancel</code> — и никакого <code>success</code>: успешная подписка приходит по сокету <code>onNftUpgraded</code> и превращается в <code>upgradeNft</code> (<code>item_list_name = \"upgrade\"</code>).</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>v_journey</code>, стадия kyc: <code>initKYC</code> → <code>kyc0</code>, <code>startKYC</code> → <code>kyc1</code> (dataLayer + PostHog, без параметров кроме <code>cid</code>); <code>gtm_tagged = 0</code> у обоих.</li><li><code>param</code> <code>verificationStatusLevel1/2</code>: только события <code>signup</code> и <code>login</code> в dataLayer; выражение <code>this.userLevel1Status</code> (устанавливается <code>setStatus</code> KYC-стора).</li><li><code>funnel_terminals</code>: <code>subscriptions / subscriptions</code> — success пусто, error <code>app_subscriptions_cancel</code>.</li><li><code>call_site</code> <code>upgradeNft</code>: <code>processNftUpgraded</code> (главный бандл); в коде ветка <code>Cs(i) === \"subscription\"</code> показывает модалку подписки, но событие — <code>upgradeNft</code>.</li><li>Имена с <code>kyc</code>: <code>app_cards_create_kyc1_*</code>, <code>app_instant-funds_kyc_*</code>, <code>app_wallet_deposit_uphold-kyc_*</code>, <code>app_wallet_deposit_kyc-guard_blocked</code> — все продуктовые.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Нельзя измерить, сколько покупок теряется на KYC-гейте и сколько пользователей проходят KYC после <code>kyc1</code>.</li><li>Подписки неотличимы от апгрейдов в PostHog/Firebase; воронка подписок обрывается на <code>proceed</code>.</li><li>Статус KYC как сегмент доступен только на момент логина в GA4, не как свойство пользователя.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li><code>kyc_required {trigger, amount}</code> в <code>navigateToKycBeforePurchase</code>; <code>kyc_result {level, status}</code> в <code>KycStore.setStatus</code>.</li><li>PostHog person property <code>kyc_level</code>.</li><li><code>app_subscriptions_success {plan, value}</code> в ветке <code>subscription</code> обработчика <code>onNftUpgraded</code>; в <code>upgradeNft</code> — параметр <code>kind = upgrade | subscription</code>.</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Какие продукты требуют KYC перед покупкой (по коду — <code>ecommpay</code> при сумме выше порога)?</li></ul>"
+    }
+   },
+   "questions": [
+    "Какие продукты требуют KYC перед покупкой (по коду — <code>ecommpay</code> при сумме выше порога)?"
+   ],
+   "notes_html": "<ul><li>q1 группировать по <code>product</code>; строки без <code>product</code> (ядро) — первой группой «(ядро)».</li><li>q4: одна таблица, в которой строка <code>AnalyticsService.upgradeNft</code> идёт последней — просто сортировка по <code>call_point_id</code>.</li></ul>",
+   "report": {
+    "id": "issue-16",
+    "title": "KYC и подписки",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Все события, в имени которых есть kyc, subscription или verification",
+      "source": "event + call_point",
+      "hint": "Одна строка — имя × система × точка вызова; product/funnel_name — из трекера",
+      "select": "single",
+      "sql": "SELECT e.system_id, e.event_name, e.call_point_id, cp.product, cp.funnel_name, e.gtm_tagged FROM event e JOIN call_point cp USING(call_point_id)\nWHERE (e.event_name LIKE '%kyc%' OR e.event_name LIKE '%subscription%' OR e.event_name LIKE '%verif%') AND e.kind = 'track'\nORDER BY cp.product, e.event_name, e.system_id"
+     },
+     {
+      "id": "q2",
+      "title": "Параметры выбранного события",
+      "source": "param",
+      "depends_on": "q1",
+      "hint": "Payload события в выбранной системе",
+      "sql": "SELECT p.name, p.value_expr, p.value_kind, p.value_literals, p.added_by FROM param p JOIN event e USING(event_id)\nWHERE e.system_id = {{ q1.system_id | q }} AND e.event_name = {{ q1.event_name | q }} AND e.call_point_id = {{ q1.call_point_id | q }}\nORDER BY p.param_id"
+     },
+     {
+      "id": "q3",
+      "title": "Где уходит статус KYC",
+      "source": "param",
+      "hint": "Параметры verificationStatus* и kyc_level* во всех событиях",
+      "sql": "SELECT e.system_id, e.event_name, e.call_point_id, p.name, p.value_expr FROM param p JOIN event e USING(event_id)\nWHERE p.name LIKE 'verificationStatus%' OR p.name LIKE 'kyc_level%' ORDER BY e.event_name"
+     },
+     {
+      "id": "q4",
+      "title": "Воронка подписок и апгрейд",
+      "source": "v_matrix",
+      "hint": "Точки SubscriptionsAnalyticsService и upgradeNft",
+      "sql": "SELECT call_point_id, funnel_name, dataLayer, posthog, firebase_web, native_firebase, native_facebook FROM v_matrix\nWHERE call_point_id LIKE 'SubscriptionsAnalyticsService.%' OR call_point_id = 'AnalyticsService.upgradeNft' ORDER BY call_point_id"
+     },
+     {
+      "id": "q5",
+      "title": "Места вызова upgradeNft и KYC",
+      "source": "v_event_site",
+      "hint": "enclosing_method — метод, arg_expr — аргументы",
+      "sql": "SELECT DISTINCT call_point_id, chunk_label, enclosing_method, trigger_kind, arg_expr FROM v_event_site\nWHERE call_point_id IN ('AnalyticsService.upgradeNft','AnalyticsService.initKYC','AnalyticsService.startKYC') ORDER BY call_point_id, call_site_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1",
+      "q2"
+     ],
+     [
+      "q3",
+      "q4"
+     ],
+     [
+      "q5"
+     ]
+    ]
+   }
+  },
+  {
+   "num": "17",
+   "slug": "posthog-nonprod",
+   "file": "17-posthog-nonprod.md",
+   "title": "PostHog принимает события из не-production окружений; ключ общий с Android SDK",
+   "severity": 3,
+   "hours": 2,
+   "hours_detail": "фронт 1, QA 1",
+   "stages": [
+    "все"
+   ],
+   "sections": {
+    "description": {
+     "title": "Описание",
+     "html": "<p>Все каналы (<code>push</code>, <code>firebase</code>, <code>appsFlyer</code>, <code>mobileApp</code>, <code>gleam</code>, Customer.io, Hotjar) проверяют геттер <code>disallow</code> (<code>!environment.production || nodeEnv !== \"production\"</code>). <code>postHog()</code> проверяет только наличие <code>environment.posthog.apiKey</code>. Тот же ключ <code>phc_kisQ…</code> используется PostHog Android SDK в APK.</p>"
+    },
+    "facts": {
+     "title": "Факты из базы",
+     "html": "<ul><li><code>system.posthog.gating</code>: «работает и вне production (флаг disallow его не глушит); требует environment.posthog.apiKey».</li><li><code>call_point.AnalyticsService.postHogAllowed.notes</code>: «геттер: наличие environment.posthog.apiKey».</li><li><code>system.posthog_android.ids</code>: «тот же ключ phc_kisQ…»; <code>feature_flag.randomNumber.notes</code>: в дев-консоли есть поле подмены <code>randomNumber</code>.</li></ul>"
+    },
+    "consequences": {
+     "title": "Последствия для аналитики",
+     "html": "<ul><li>Стенды и локальные сборки с production-ключом пишут в тот же проект PostHog: тестовые регистрации и покупки попадают в воронки.</li><li>Нельзя отделить нативный трафик от веб по ключу.</li></ul>"
+    },
+    "fix": {
+     "title": "Как исправить",
+     "html": "<ol><li><code>postHog(e,t){ if (this.disallow) return; … }</code> — одна строка.</li><li>Отдельный проект/ключ для non-prod и для Android SDK (или <code>$lib</code>-фильтр в PostHog).</li></ol>"
+    },
+    "questions": {
+     "title": "Вопросы команде",
+     "html": "<ul><li>Есть ли в PostHog фильтр по <code>$host</code>/<code>$lib</code>, который уже отрезает стенды?</li></ul>"
+    }
+   },
+   "questions": [
+    "Есть ли в PostHog фильтр по <code>$host</code>/<code>$lib</code>, который уже отрезает стенды?"
+   ],
+   "notes_html": "<ul><li>q1: в <code>gating</code> подстроку «вне production» подсветить.</li><li>q2 — вспомогательная таблица; при отсутствии совпадений показать строки <code>disallow</code> и <code>postHogAllowed</code> (они входят в условие всегда).</li></ul>",
+   "report": {
+    "id": "issue-17",
+    "title": "PostHog вне production",
+    "blocks": [
+     {
+      "id": "q1",
+      "title": "Условия отправки по системам",
+      "source": "system",
+      "hint": "gating — условия из кода",
+      "select": "single",
+      "sql": "SELECT system_id, title, gating, ids FROM system ORDER BY system_id",
+      "columns": {
+       "gating": {
+        "render": "long",
+        "width": 520
+       }
+      }
+     },
+     {
+      "id": "q2",
+      "title": "Управляющие методы AnalyticsService, относящиеся к выбранной системе",
+      "source": "call_point",
+      "hint": "Методы без собственных событий: геттеры, загрузчики, обёртки",
+      "depends_on": "q1",
+      "sql": "SELECT call_point_id, method, signature, notes FROM call_point\nWHERE layer = 'core_service' AND NOT EXISTS (SELECT 1 FROM event e WHERE e.call_point_id = call_point.call_point_id)\n  AND (LOWER(notes) LIKE '%' || LOWER(REPLACE({{ q1.system_id | q }}, '_', ' ')) || '%'\n       OR LOWER(call_point_id) LIKE '%' || LOWER(REPLACE({{ q1.system_id | q }}, '_datalayer', '')) || '%'\n       OR method IN ('disallow','postHogAllowed'))\nORDER BY call_point_id"
+     }
+    ],
+    "layout": [
+     [
+      "q1"
+     ],
+     [
+      "q2"
+     ]
+    ]
+   }
+  }
+ ]
+}
